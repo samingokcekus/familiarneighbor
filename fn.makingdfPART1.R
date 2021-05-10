@@ -230,7 +230,6 @@ N1964 <- N1964[!grepl("UNKNOWN", N1964$ring_ring),]
 N_reference <- N1964
 
 
-
 #one year at a time, for now..
 xdata <- breeding.data.neighbors[which(breeding.data.neighbors$Species=="g"),]
 
@@ -10867,7 +10866,22 @@ saveRDS(fn.data, "fn.data.noage.Rds")
 #setwd("~/Documents/2/Familiar_neighbors/DATA")
 #fn.data <- readRDS("fn.data.noage.Rds")
 
-#add the ages also 
+
+####get info for if pairs were together in previous year ####
+
+pairs <- fn.data[,c("Father","Mother", "year")]
+pairs$Father <- toupper(pairs$Father)
+pairs$Mother <- toupper(pairs$Mother)
+pairs$yearplusone <- pairs$year + 1
+pairs$ring_ring <-(with(pairs, paste(Father, Mother, sep="_")))
+pairs <- pairs[,c(4,5)]
+names(pairs)[1] <- "year"
+pairs$Pairfp <- TRUE
+
+fn.data$ring_ring <-(with(fn.data, paste(Father, Mother, sep="_")))
+
+
+####add the ages also ####
 agedata <- read.csv("GRETI_Age_Data.csv")
 agedata <- agedata[,c(2,3,4,10)]
 agedata$Season <- gsub("^.{0,5}", "", agedata$Season)  
@@ -10891,6 +10905,22 @@ fn.data.temp <- merge(fn.data, agedata, by=c("focal.ring", "year"), all.x=TRUE)
 summary(as.factor(fn.data.temp$Age))
 table(fn.data.temp$Age, fn.data.temp$year)
 fn.data <- fn.data.temp[which(fn.data.temp$Age=="adult"),]
+
+
+#add pair info
+temp <- merge(fn.data, pairs, by=c("ring_ring", "year"), all.x=TRUE)
+
+#change NA to false
+temp$Pairfp <- with(temp, ifelse(is.na(Pairfp), "FALSE", Pairfp)) 
+
+
+fn.data <- fn.data[order(fn.data$box.year.parentid),]
+temp <- temp[order(temp$box.year.parentid),]
+summary(arsenal::comparedf(temp, fn.data))
+temp <- temp[c(1:9143),]
+summary(arsenal::comparedf(temp, fn.data))
+
+fn.data <- temp
 
 #uppercase column names 
 colnames(fn.data) <- stringr::str_to_title(colnames(fn.data))
