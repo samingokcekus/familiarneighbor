@@ -25,7 +25,11 @@
 
 
 library(tidyverse); library(magrittr); library(ggregplot); library(cowplot); library(colorspace)
+<<<<<<< HEAD
 library(GGally); library(patchwork)
+=======
+library(GGally); library(patchwork); library(dplyr)
+>>>>>>> d933e94c52c9aa852a71ff2d4bfec316012f3840
 
 theme_set(theme_cowplot())
 
