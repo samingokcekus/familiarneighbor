@@ -16,6 +16,63 @@ zz2012 %>% bind_rows(zz2013, zz2014) -> Tits
 
 Tits %<>% rename_all(CamelConvert)
 
+# Neighbour stuff ####
+
+Tits %>% Grelect(matches("^N[1-9]")) %>% 
+  Grelect(contains("bs")) %>% 
+  rowSums(na.rm = T) ->
+  # rowMeans(na.rm = T) -> 
+  Tits$AllNeighbours
+
+Tits %>% Grelect(matches("^N[1-9]")) %>% 
+  Grelect(contains("fbs")) %>% 
+  rowSums(na.rm = T) ->
+  # rowMeans(na.rm = T) -> 
+  Tits$FemaleNeighbours
+
+Tits %>% Grelect(matches("^N[1-9]")) %>% 
+  Grelect(contains("mbs")) %>% 
+  rowSums(na.rm = T) ->
+  # rowMeans(na.rm = T) -> 
+  Tits$MaleNeighbours
+
+Tits %>% Grelect(matches("^N[1-9]")) %>% 
+  Grelect(contains("bs")) %>% 
+  # rowSums(na.rm = T) -> 
+  rowMeans(na.rm = T) ->
+  Tits$AllNeighbours.Mean
+
+Tits %>% Grelect(matches("^N[1-9]")) %>% 
+  Grelect(contains("fbs")) %>% 
+  # rowSums(na.rm = T) -> 
+  rowMeans(na.rm = T) ->
+  Tits$FemaleNeighbours.Mean
+
+Tits %>% Grelect(matches("^N[1-9]")) %>% 
+  Grelect(contains("mbs")) %>% 
+  # rowSums(na.rm = T) -> 
+  rowMeans(na.rm = T) ->
+  Tits$MaleNeighbours.Mean
+
+Tits %>% Grelect(matches("^N[1-9]")) %>% 
+  Grelect(contains("bs")) %>% mutate_all(AsBinary) %>% 
+  rowSums(na.rm = T) ->
+  # rowMeans(na.rm = T) -> 
+  Tits$NAllNeighbours
+
+Tits %>% Grelect(matches("^N[1-9]")) %>% 
+  Grelect(contains("fbs")) %>% mutate_all(AsBinary) %>% 
+  rowSums(na.rm = T) ->
+  # rowMeans(na.rm = T) -> 
+  Tits$NFemaleNeighbours
+
+Tits %>% Grelect(matches("^N[1-9]")) %>% 
+  Grelect(contains("mbs")) %>% mutate_all(AsBinary) %>% 
+  rowSums(na.rm = T) ->
+  # rowMeans(na.rm = T) -> 
+  Tits$NMaleNeighbours
+
+
 # Density ####
 
 library(adehabitatHR)
