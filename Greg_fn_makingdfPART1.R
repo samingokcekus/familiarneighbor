@@ -225,7 +225,10 @@ FocalYears <- FocalYears[FocalYears >= 1964]
 
 FocalYear <- FocalYears[1]
 
-NeighbourList <- list()
+NeighbourReferenceList <- list()
+TerritoriesListList <- list()
+
+# Beginning of loop ####
 
 for(FocalYear in FocalYears){
   
@@ -393,9 +396,147 @@ for(FocalYear in FocalYears){
   
   # N_reference <- N1964
   
-  NeighbourList[[which(FocalYears == FocalYear)]] <- N1964
+  NeighbourReferenceList[[which(FocalYears == FocalYear)]] <- N1964
+  TerritoriesListList[[which(FocalYears == FocalYear)]] <- territories.list
   
 }
+
+# End of loop ####
+
+# New Loop ###
+
+NEIOutputList <- list()
+
+for(FocalYear in FocalYears){
+  
+  print(FocalYear)
+  
+  # ydata <- base.fn.data[which(base.fn.data$year==1965),]
+  ydata <- base.fn.data %>% filter(year == FocalYear)
+  
+  # nei1965 <- territories.list[,c(1,4)]
+  nei1965 <- TerritoriesListList[[which(FocalYears == FocalYear)]][,c(1,4)]
+  
+  # nei1965 %>% group_by(Focal.box) %>% mutate(id = seq_along(Focal.box)) -> nei1965
+  nei1965 %<>% 
+    group_by(Focal.box) %>% 
+    mutate(id = seq_along(Focal.box))
+  
+  nei1965 <- tidyr::pivot_wider(nei1965, 
+                                names_from = "id", 
+                                values_from = "Box.N")
+  
+  #add "N" to column names 
+  # colnames(nei1965) <- paste0('N', colnames(nei1965))
+  # names(nei1965)[1] <- "Focal.box"
+  
+  nei1965 %<>% 
+    rename_all(~paste0("N.", .x)) %>% 
+    rename(Focal.box = 1)
+  
+  ##so now we need to add the parent information for each neighbor
+  #get a list of all parents in 1965
+  # as.data.frame(colnames(ydata))
+  # par1965 <- ydata[,c(2,19,20)]
+  # par1965 <- distinct(par1965, Box, .keep_all = TRUE)
+  
+  # For future reference you can do this 
+  
+  ydata[,c("year", "Num.broken.eggs", "Expected.hatch.date")]
+  
+  # Or this
+  
+  par1965 <- 
+    ydata %>% 
+    dplyr::select(c("year", "Num.broken.eggs", "Expected.hatch.date"))
+  
+  # Both of these options will prevent what's happened here (I think)
+  # Which is that it isn't selecting what I'm expecting
+  
+  par1965 <- distinct(par1965, Box, .keep_all = TRUE)
+  
+  ####add neighbor ids
+  ####1965
+  #N1
+  names(par1965)[names(par1965) == "Box"] <- "N1"
+  names(par1965)[names(par1965) == "Mother"] <- "N1.mother"
+  names(par1965)[names(par1965) == "Father"] <- "N1.father"
+  nei1965 <- merge(nei1965, par1965, by="N1", all.x=TRUE)
+  #N2
+  names(par1965)[names(par1965) == "N1"] <- "N2"
+  names(par1965)[names(par1965) == "N1.mother"] <- "N2.mother"
+  names(par1965)[names(par1965) == "N1.father"] <- "N2.father"
+  nei1965 <- merge(nei1965, par1965, by="N2", all.x=TRUE)
+  #N3
+  names(par1965)[names(par1965) == "N2"] <- "N3"
+  names(par1965)[names(par1965) == "N2.mother"] <- "N3.mother"
+  names(par1965)[names(par1965) == "N2.father"] <- "N3.father"
+  nei1965 <- merge(nei1965, par1965, by="N3", all.x=TRUE)
+  #N4
+  names(par1965)[names(par1965) == "N3"] <- "N4"
+  names(par1965)[names(par1965) == "N3.mother"] <- "N4.mother"
+  names(par1965)[names(par1965) == "N3.father"] <- "N4.father"
+  nei1965 <- merge(nei1965, par1965, by="N4", all.x=TRUE)
+  #N5
+  names(par1965)[names(par1965) == "N4"] <- "N5"
+  names(par1965)[names(par1965) == "N4.mother"] <- "N5.mother"
+  names(par1965)[names(par1965) == "N4.father"] <- "N5.father"
+  nei1965 <- merge(nei1965, par1965, by="N5", all.x=TRUE)
+  #N6
+  names(par1965)[names(par1965) == "N5"] <- "N6"
+  names(par1965)[names(par1965) == "N5.mother"] <- "N6.mother"
+  names(par1965)[names(par1965) == "N5.father"] <- "N6.father"
+  nei1965 <- merge(nei1965, par1965, by="N6", all.x=TRUE)
+  #N7
+  names(par1965)[names(par1965) == "N6"] <- "N7"
+  names(par1965)[names(par1965) == "N6.mother"] <- "N7.mother"
+  names(par1965)[names(par1965) == "N6.father"] <- "N7.father"
+  nei1965 <- merge(nei1965, par1965, by="N7", all.x=TRUE)
+  #N8
+  names(par1965)[names(par1965) == "N7"] <- "N8"
+  names(par1965)[names(par1965) == "N7.mother"] <- "N8.mother"
+  names(par1965)[names(par1965) == "N7.father"] <- "N8.father"
+  nei1965 <- merge(nei1965, par1965, by="N8", all.x=TRUE)
+  #N9
+  names(par1965)[names(par1965) == "N8"] <- "N9"
+  names(par1965)[names(par1965) == "N8.mother"] <- "N9.mother"
+  names(par1965)[names(par1965) == "N8.father"] <- "N9.father"
+  nei1965 <- merge(nei1965, par1965, by="N9", all.x=TRUE)
+  #N10
+  names(par1965)[names(par1965) == "N9"] <- "N10"
+  names(par1965)[names(par1965) == "N9.mother"] <- "N10.mother"
+  names(par1965)[names(par1965) == "N9.father"] <- "N10.father"
+  nei1965 <- merge(nei1965, par1965, by="N10", all.x=TRUE)
+  
+  #and identifying column 
+  nei1965$year <- 1965
+  nei1965a  <-data.frame(nei1965,"box.year.parentid"=paste(nei1965$Focal.box, nei1965$year, "mother",sep="_")) 
+  nei1965b  <-data.frame(nei1965,"box.year.parentid"=paste(nei1965$Focal.box, nei1965$year, "father",sep="_")) 
+  
+  nei1965 <- rbind(nei1965a, nei1965b)
+  rm(nei1965a, nei1965b)
+  
+  nei1965$N9 <- NA 
+  nei1965$N10 <- NA
+  
+  nei1965$N9.mother <- NA
+  nei1965$N9.father <- NA
+  nei1965$N10.mother <- NA
+  nei1965$N10.father <- NA
+  
+  nei1965 <- nei1965[,order(colnames(nei1965))]
+  
+  # nei_output <- nei1965
+  
+  NEIOutputList[[which(FocalYears == FocalYear)]] <- nei1965
+  
+}
+
+# Combine everything in this list using this ####
+
+NEIOutputList %>% bind_rows(.id = "Year")
+
+
 
 #one year at a time, for now..
 xdata <- breeding.data.neighbors[which(breeding.data.neighbors$Species=="g"),]
