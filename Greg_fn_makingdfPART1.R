@@ -10,6 +10,7 @@ nestbox.data <- read.csv("Data/Nestboxes.csv")
 wood.outline <- sf::st_read("Data/perimeter poly with clearings_region.shp")
 wood.outline <- wood.outline[1,] #keep first polygon
 
+
 #add box locations to breeding data
 # box.locations <- nestbox.data[,c(2,3,4)]
 
@@ -140,14 +141,14 @@ xdata2 %>%
 
 # You could also do this: 
 
-xdata %<>% as.data.frame()
-
-Longxdata <- 
-  xdata %>% pivot_longer(cols = c(Father, Mother), 
-                         names_to = "parent",
-                         values_to = "Focal.ring")
-
-xdata <- Longxdata
+#xdata %<>% as.data.frame()
+#
+#Longxdata <- 
+#  xdata %>% pivot_longer(cols = c(Father, Mother), 
+#                         names_to = "parent",
+#                         values_to = "Focal.ring")
+#
+#xdata <- Longxdata
 
 #add sex
 
@@ -158,7 +159,7 @@ xdata <- Longxdata
 # xdata$focal.sex <- with(xdata, ifelse(parent == "father", "M", 
 #                                       xdata$focal.sex)) 
 
-xdata %<>% mutate(focal.sex = substr(parent, 1, 1))
+xdata2 %<>% mutate(focal.sex = substr(parent, 1, 1))
 
 #add binary success fitness variable 
 # xdata$Binary.succ <- xdata$Num.fledglings
@@ -169,9 +170,9 @@ xdata %<>% mutate(focal.sex = substr(parent, 1, 1))
 
 # xdata$Binary.succ <- as.numeric(xdata$Binary.succ)
 
-xdata %<>% mutate(Binary.succ = as.numeric(Num.fledglings > 0))
+xdata2 %<>% mutate(Binary.succ = as.numeric(Num.fledglings > 0))
 
-base.fn.data <- xdata
+base.fn.data <- xdata2
 
 ###get a version of the breeding data for finding neighbors 
 zdata <- raw.breeding.data
@@ -442,13 +443,13 @@ for(FocalYear in FocalYears){
   
   # For future reference you can do this 
   
-  ydata[,c("year", "Num.broken.eggs", "Expected.hatch.date")]
+  ydata[,c("Box", "Mother", "Father")]
   
   # Or this
   
   par1965 <- 
     ydata %>% 
-    dplyr::select(c("year", "Num.broken.eggs", "Expected.hatch.date"))
+    dplyr::select(c("Box", "Mother", "Father"))
   
   # Both of these options will prevent what's happened here (I think)
   # Which is that it isn't selecting what I'm expecting
