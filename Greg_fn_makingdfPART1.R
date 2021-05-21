@@ -408,7 +408,15 @@ for(FocalYear in FocalYears){
 
 NEIOutputList <- list()
 
-for(FocalYear in FocalYears){
+#so i think the problem here is that the loop needs to start at 1965 rather than 1964??
+#so i reset these? just wanted to leave a note incase i mess things up haha
+FocalYears <- xdata$year %>% unique %>% sort
+
+FocalYears <- FocalYears[FocalYears >= 1965]
+
+FocalYear <- FocalYears[1]
+
+for(FocalYear in FocalYears){ 
   
   print(FocalYear)
   
@@ -459,63 +467,67 @@ for(FocalYear in FocalYears){
   ####add neighbor ids
   ####1965
   #N1
-  names(par1965)[names(par1965) == "Box"] <- "N1"
+  names(par1965)[names(par1965) == "Box"] <- "N.1"
   names(par1965)[names(par1965) == "Mother"] <- "N1.mother"
   names(par1965)[names(par1965) == "Father"] <- "N1.father"
-  nei1965 <- merge(nei1965, par1965, by="N1", all.x=TRUE)
+  nei1965 <- merge(nei1965, par1965, by="N.1", all.x=TRUE)
   #N2
-  names(par1965)[names(par1965) == "N1"] <- "N2"
+  names(par1965)[names(par1965) == "N.1"] <- "N.2"
   names(par1965)[names(par1965) == "N1.mother"] <- "N2.mother"
   names(par1965)[names(par1965) == "N1.father"] <- "N2.father"
-  nei1965 <- merge(nei1965, par1965, by="N2", all.x=TRUE)
+  nei1965 <- merge(nei1965, par1965, by="N.2", all.x=TRUE)
   #N3
-  names(par1965)[names(par1965) == "N2"] <- "N3"
+  names(par1965)[names(par1965) == "N.2"] <- "N.3"
   names(par1965)[names(par1965) == "N2.mother"] <- "N3.mother"
   names(par1965)[names(par1965) == "N2.father"] <- "N3.father"
-  nei1965 <- merge(nei1965, par1965, by="N3", all.x=TRUE)
+  nei1965 <- merge(nei1965, par1965, by="N.3", all.x=TRUE)
   #N4
-  names(par1965)[names(par1965) == "N3"] <- "N4"
+  names(par1965)[names(par1965) == "N.3"] <- "N.4"
   names(par1965)[names(par1965) == "N3.mother"] <- "N4.mother"
   names(par1965)[names(par1965) == "N3.father"] <- "N4.father"
-  nei1965 <- merge(nei1965, par1965, by="N4", all.x=TRUE)
+  nei1965 <- merge(nei1965, par1965, by="N.4", all.x=TRUE)
   #N5
-  names(par1965)[names(par1965) == "N4"] <- "N5"
+  names(par1965)[names(par1965) == "N.4"] <- "N.5"
   names(par1965)[names(par1965) == "N4.mother"] <- "N5.mother"
   names(par1965)[names(par1965) == "N4.father"] <- "N5.father"
-  nei1965 <- merge(nei1965, par1965, by="N5", all.x=TRUE)
+  nei1965 <- merge(nei1965, par1965, by="N.5", all.x=TRUE)
   #N6
-  names(par1965)[names(par1965) == "N5"] <- "N6"
+  names(par1965)[names(par1965) == "N.5"] <- "N.6"
   names(par1965)[names(par1965) == "N5.mother"] <- "N6.mother"
   names(par1965)[names(par1965) == "N5.father"] <- "N6.father"
-  nei1965 <- merge(nei1965, par1965, by="N6", all.x=TRUE)
+  nei1965 <- merge(nei1965, par1965, by="N.6", all.x=TRUE)
   #N7
-  names(par1965)[names(par1965) == "N6"] <- "N7"
+  names(par1965)[names(par1965) == "N.6"] <- "N.7"
   names(par1965)[names(par1965) == "N6.mother"] <- "N7.mother"
   names(par1965)[names(par1965) == "N6.father"] <- "N7.father"
-  nei1965 <- merge(nei1965, par1965, by="N7", all.x=TRUE)
+  nei1965 <- merge(nei1965, par1965, by="N.7", all.x=TRUE)
   #N8
-  names(par1965)[names(par1965) == "N7"] <- "N8"
+  names(par1965)[names(par1965) == "N.7"] <- "N.8"
   names(par1965)[names(par1965) == "N7.mother"] <- "N8.mother"
   names(par1965)[names(par1965) == "N7.father"] <- "N8.father"
-  nei1965 <- merge(nei1965, par1965, by="N8", all.x=TRUE)
+  nei1965 <- merge(nei1965, par1965, by="N.8", all.x=TRUE)
   #N9
-  names(par1965)[names(par1965) == "N8"] <- "N9"
+  names(par1965)[names(par1965) == "N.8"] <- "N.9"
   names(par1965)[names(par1965) == "N8.mother"] <- "N9.mother"
   names(par1965)[names(par1965) == "N8.father"] <- "N9.father"
-  nei1965 <- merge(nei1965, par1965, by="N9", all.x=TRUE)
+  nei1965 <- merge(nei1965, par1965, by="N.9", all.x=TRUE)
   #N10
-  names(par1965)[names(par1965) == "N9"] <- "N10"
+  names(par1965)[names(par1965) == "N.9"] <- "N.10"
   names(par1965)[names(par1965) == "N9.mother"] <- "N10.mother"
   names(par1965)[names(par1965) == "N9.father"] <- "N10.father"
-  nei1965 <- merge(nei1965, par1965, by="N10", all.x=TRUE)
+  nei1965 <- merge(nei1965, par1965, by="N.10", all.x=TRUE)
   
   #and identifying column 
-  nei1965$year <- 1965
+  nei1965$year <- FocalYear
   nei1965a  <-data.frame(nei1965,"box.year.parentid"=paste(nei1965$Focal.box, nei1965$year, "mother",sep="_")) 
   nei1965b  <-data.frame(nei1965,"box.year.parentid"=paste(nei1965$Focal.box, nei1965$year, "father",sep="_")) 
   
   nei1965 <- rbind(nei1965a, nei1965b)
   rm(nei1965a, nei1965b)
+  
+  #ok so another problem here is that i manually looked at the max number of neighbors there were for each year
+  #and then added columns with NA (like i'm doing below) so that they would all have ten... 
+  #could you help me with this? 
   
   nei1965$N9 <- NA 
   nei1965$N10 <- NA
@@ -10952,6 +10964,14 @@ nei2020$N10.father <- NA
 nei2020 <- nei2020[,order(colnames(nei2020))]
 
 nei_output <- rbind(nei_output, nei2020)
+
+
+
+
+
+
+
+###### 
 
 ## add number of neighbors 
 
