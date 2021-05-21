@@ -1,6 +1,6 @@
 
 # Greg editing Samin's workflow ####
-# setwd("~/Documents/2/Familiar_neighbors/DATA") # Don't use this, use a project
+setwd("~/Documents/2/Familiar_neighbors/DATA") # Don't use this, use a project
 
 library(sf); library(tidyverse); library(magrittr)
 
@@ -809,7 +809,7 @@ DF.temp$N10.FATHERfp <- with(DF.temp, ifelse(is.na(N10.FATHERfp), FALSE, N10.FAT
 fn.data <- DF.temp
 
 saveRDS(fn.data, "fn.data.noage.Rds")
-
+rm(x,xdata,xdata2,ydata,zdata,test1,test2,temp)
 ##everything until here should be fine?? 
 
 #setwd("~/Documents/2/Familiar_neighbors/DATA")
@@ -819,10 +819,13 @@ saveRDS(fn.data, "fn.data.noage.Rds")
 ####get info for if pairs were together in previous year ####
 
 pairs <- fn.data[,c("Father","Mother", "year")]
+pairs <- unique(pairs)
+
 pairs$Father <- toupper(pairs$Father)
 pairs$Mother <- toupper(pairs$Mother)
 pairs$yearplusone <- pairs$year + 1
 pairs$ring_ring <-(with(pairs, paste(Father, Mother, sep="_")))
+
 pairs <- pairs[,c(4,5)]
 names(pairs)[1] <- "year"
 pairs$Pairfp <- TRUE
@@ -859,15 +862,28 @@ fn.data <- fn.data.temp[which(fn.data.temp$Age=="adult"),]
 #add pair info
 temp <- merge(fn.data, pairs, by=c("ring_ring", "year"), all.x=TRUE)
 
+temp <- as.data.frame(temp[,c(1,2,84)])
+
 #change NA to false
-temp$Pairfp <- with(temp, ifelse(is.na(Pairfp), "FALSE", Pairfp)) 
+temp$Pairfp <- as.logical(with(temp, ifelse(is.na(Pairfp), "FALSE", Pairfp))) 
+summary(as.factor(temp$Pairfp))
 
 
-fn.data <- fn.data[order(fn.data$box.year.parentid),]
-temp <- temp[order(temp$box.year.parentid),]
-summary(arsenal::comparedf(temp, fn.data))
-temp <- temp[c(1:9097),]
-summary(arsenal::comparedf(temp, fn.data))
+###trying it another way? #### 
+pairs2 <- fn.data[,c("Father","Mother", "year")]
+pairs2$Father <- toupper(pairs2$Father)
+pairs2$Mother <- toupper(pairs2$Mother)
+pairs2$ring_ring <-(with(pairs2, paste(Father, Mother, sep="_")))
+
+pairs2 <- pairs2[,c(3,4)]
+temp <- merge(pairs2, pairs, by=c("ring_ring", "year"), all.x=TRUE)
+temp$Pairfp <- as.logical(with(temp, ifelse(is.na(Pairfp), "FALSE", Pairfp))) 
+
+temp <- merge(fn.data, temp, by=c("ring_ring", "year"), all.x=TRUE)
+table(temp$Pairfp, temp$Mean.chick.weight)
+#nope##### 
+
+
 
 fn.data <- temp
 
