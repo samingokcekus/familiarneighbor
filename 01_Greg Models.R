@@ -29,7 +29,8 @@ Resps <- c(#"April.hatch.date",
   # "Num.chicks",
   # "Num.dead.chicks",
   # "Num.eggs.weighed",
-  "Num.fledglings")
+  "Num.fledglings") %>% 
+  sort
 
 Covar <- "Year"
 
@@ -39,12 +40,9 @@ SocialCovar <- c("N.num",
                  "Pairfp"
 )
 
-# DF %>% dplyr::select(SocialCovar) %>% GGally::ggpairs()
-
-IMList <- list()
-IMList2 <- list()
-
-Resps %<>% sort
+IMList <- 
+  IMList2 <- 
+  list()
 
 r <- 1
 
