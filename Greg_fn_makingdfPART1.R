@@ -1,6 +1,6 @@
 
 # Greg editing Samin's workflow ####
-setwd("~/Documents/2/Familiar_neighbors/DATA") # Don't use this, use a project
+# setwd("~/Documents/2/Familiar_neighbors/DATA") # Don't use this, use a project
 
 library(sf); library(tidyverse); library(magrittr)
 
@@ -103,6 +103,38 @@ xdata <-
 # xdata <- xdata[which(xdata$nest.id.type == "both"),] 
 
 xdata %<>% filter(nest.id.type == "both")
+
+
+
+#### pair familiarity #### 
+
+#i thought maybe something is going wrong later because there are to rows for each pair
+#but i still can't seem to fix the issue even when i do it before duplicating the rows...
+
+pairs <- xdata[,c("Father","Mother", "year")] #get a list of all the pairs for each year
+pairs <- unique(pairs) #remove duplicates (when the same pair breeds more than once in the same year)
+
+pairs$yearplusone <- pairs$year + 1 #we want to match the previous year's information, so adding 1
+pairs$ring_ring_year <-(with(pairs, paste(Father, Mother, yearplusone, sep="_"))) #making an identifier column
+
+pairs$Pairfp <- TRUE #a column indicating that these pairs were familiar in the previous year
+pairs <- pairs[,c(5,6)] #keep relevant columns
+
+xdata$ring_ring_year <-(with(xdata, paste(Father, Mother, year, sep="_"))) #make identifier column in xdata 
+
+#temp <- merge(xdata, pairs, by=c("ring_ring_year"), all.x=TRUE)
+temp <- left_join(xdata, pairs, by="ring_ring_year") #join them 
+table(temp$Pairfp, temp$Mean.chick.weight) #??? so here there are chick weights for true values
+#temp <- as.data.frame(temp[,c(64)])
+#names(temp)[1] <- "Pairfp"
+
+#change NA to false
+temp$Pairfp <- as.logical(with(temp, ifelse(is.na(Pairfp), "FALSE", Pairfp))) #but when i do this 
+table(temp$Pairfp, temp$Mean.chick.weight) #there aren't ?? 
+
+#temp2 <- cbind(xdata, temp)
+
+##### end pair familiarity ####
 
 #make a row for the mom and the dad of each nest 
 
@@ -870,17 +902,17 @@ summary(as.factor(temp$Pairfp))
 
 
 ###trying it another way? #### 
-pairs2 <- fn.data[,c("Father","Mother", "year")]
-pairs2$Father <- toupper(pairs2$Father)
-pairs2$Mother <- toupper(pairs2$Mother)
-pairs2$ring_ring <-(with(pairs2, paste(Father, Mother, sep="_")))
-
-pairs2 <- pairs2[,c(3,4)]
-temp <- merge(pairs2, pairs, by=c("ring_ring", "year"), all.x=TRUE)
-temp$Pairfp <- as.logical(with(temp, ifelse(is.na(Pairfp), "FALSE", Pairfp))) 
-
-temp <- merge(fn.data, temp, by=c("ring_ring", "year"), all.x=TRUE)
-table(temp$Pairfp, temp$Mean.chick.weight)
+#pairs2 <- fn.data[,c("Father","Mother", "year")]
+#pairs2$Father <- toupper(pairs2$Father)
+#pairs2$Mother <- toupper(pairs2$Mother)
+#pairs2$ring_ring <-(with(pairs2, paste(Father, Mother, sep="_")))
+#
+#pairs2 <- pairs2[,c(3,4)]
+#temp <- merge(pairs2, pairs, by=c("ring_ring", "year"), all.x=TRUE)
+#temp$Pairfp <- as.logical(with(temp, ifelse(is.na(Pairfp), "FALSE", Pairfp))) 
+#
+#temp <- merge(fn.data, temp, by=c("ring_ring", "year"), all.x=TRUE)
+#table(temp$Pairfp, temp$Mean.chick.weight)
 #nope##### 
 
 
