@@ -122,15 +122,18 @@ pairs <- pairs[,c(5,6)] #keep relevant columns
 
 xdata$ring_ring_year <-(with(xdata, paste(Father, Mother, year, sep="_"))) #make identifier column in xdata 
 
-#temp <- merge(xdata, pairs, by=c("ring_ring_year"), all.x=TRUE)
-temp <- left_join(xdata, pairs, by="ring_ring_year") #join them 
-table(temp$Pairfp, temp$Mean.chick.weight) #??? so here there are chick weights for true values
-#temp <- as.data.frame(temp[,c(64)])
-#names(temp)[1] <- "Pairfp"
+# #temp <- merge(xdata, pairs, by=c("ring_ring_year"), all.x=TRUE)
+# temp <- left_join(xdata, pairs, by="ring_ring_year") #join them 
+# table(temp$Pairfp, temp$Mean.chick.weight) #??? so here there are chick weights for true values
+# #temp <- as.data.frame(temp[,c(64)])
+# #names(temp)[1] <- "Pairfp"
+# 
+# #change NA to false
+# temp$Pairfp <- as.logical(with(temp, ifelse(is.na(Pairfp), "FALSE", Pairfp))) #but when i do this 
+# table(temp$Pairfp, temp$Mean.chick.weight) #there aren't ?? 
 
-#change NA to false
-temp$Pairfp <- as.logical(with(temp, ifelse(is.na(Pairfp), "FALSE", Pairfp))) #but when i do this 
-table(temp$Pairfp, temp$Mean.chick.weight) #there aren't ?? 
+xdata %<>% 
+  mutate(Pairfp = ring_ring_year %in% pairs$ring_ring_year)
 
 #temp2 <- cbind(xdata, temp)
 
