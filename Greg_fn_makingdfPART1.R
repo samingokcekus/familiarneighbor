@@ -122,20 +122,10 @@ pairs <- pairs[,c(5,6)] #keep relevant columns
 
 xdata$ring_ring_year <-(with(xdata, paste(Father, Mother, year, sep="_"))) #make identifier column in xdata 
 
-# #temp <- merge(xdata, pairs, by=c("ring_ring_year"), all.x=TRUE)
-# temp <- left_join(xdata, pairs, by="ring_ring_year") #join them 
-# table(temp$Pairfp, temp$Mean.chick.weight) #??? so here there are chick weights for true values
-# #temp <- as.data.frame(temp[,c(64)])
-# #names(temp)[1] <- "Pairfp"
-# 
-# #change NA to false
-# temp$Pairfp <- as.logical(with(temp, ifelse(is.na(Pairfp), "FALSE", Pairfp))) #but when i do this 
-# table(temp$Pairfp, temp$Mean.chick.weight) #there aren't ?? 
-
 xdata %<>% 
   mutate(Pairfp = ring_ring_year %in% pairs$ring_ring_year)
 
-#temp2 <- cbind(xdata, temp)
+xdata$ring_ring_year <- NULL
 
 ##### end pair familiarity ####
 
@@ -850,25 +840,7 @@ rm(x,xdata,xdata2,ydata,zdata,test1,test2,temp)
 #setwd("~/Documents/2/Familiar_neighbors/DATA")
 #fn.data <- readRDS("fn.data.noage.Rds")
 
-
-####get info for if pairs were together in previous year ####
-
-pairs <- fn.data[,c("Father","Mother", "year")]
-pairs <- unique(pairs)
-
-pairs$Father <- toupper(pairs$Father)
-pairs$Mother <- toupper(pairs$Mother)
-pairs$yearplusone <- pairs$year + 1
-pairs$ring_ring <-(with(pairs, paste(Father, Mother, sep="_")))
-
-pairs <- pairs[,c(4,5)]
-names(pairs)[1] <- "year"
-pairs$Pairfp <- TRUE
-
-fn.data$ring_ring <-(with(fn.data, paste(Father, Mother, sep="_")))
-
-
-####add the ages also ####
+####add the ages ####
 agedata <- read.csv("GRETI_Age_Data.csv")
 agedata <- agedata[,c(2,3,4,10)]
 agedata$Season <- gsub("^.{0,5}", "", agedata$Season)  
@@ -892,35 +864,6 @@ fn.data.temp <- merge(fn.data, agedata, by=c("focal.ring", "year"), all.x=TRUE)
 summary(as.factor(fn.data.temp$Age))
 table(fn.data.temp$Age, fn.data.temp$year)
 fn.data <- fn.data.temp[which(fn.data.temp$Age=="adult"),]
-
-
-#add pair info
-temp <- merge(fn.data, pairs, by=c("ring_ring", "year"), all.x=TRUE)
-
-temp <- as.data.frame(temp[,c(1,2,84)])
-
-#change NA to false
-temp$Pairfp <- as.logical(with(temp, ifelse(is.na(Pairfp), "FALSE", Pairfp))) 
-summary(as.factor(temp$Pairfp))
-
-
-###trying it another way? #### 
-#pairs2 <- fn.data[,c("Father","Mother", "year")]
-#pairs2$Father <- toupper(pairs2$Father)
-#pairs2$Mother <- toupper(pairs2$Mother)
-#pairs2$ring_ring <-(with(pairs2, paste(Father, Mother, sep="_")))
-#
-#pairs2 <- pairs2[,c(3,4)]
-#temp <- merge(pairs2, pairs, by=c("ring_ring", "year"), all.x=TRUE)
-#temp$Pairfp <- as.logical(with(temp, ifelse(is.na(Pairfp), "FALSE", Pairfp))) 
-#
-#temp <- merge(fn.data, temp, by=c("ring_ring", "year"), all.x=TRUE)
-#table(temp$Pairfp, temp$Mean.chick.weight)
-#nope##### 
-
-
-
-fn.data <- temp
 
 #uppercase column names 
 colnames(fn.data) <- stringr::str_to_title(colnames(fn.data))
