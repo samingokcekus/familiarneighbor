@@ -137,7 +137,7 @@ x <- data.table::setDT(xdata)[, .(parent = c("mother","father")),
                                 Species, April.lay.date, Laying.rate, Incubation.started,
                                 April.hatch.date, Incubation.duration, Total.egg.weight, Num.eggs.weighed,
                                 Clutch.size, Num.chicks, Num.dead.chicks, Num.fledglings, Mean.chick.weight,
-                                Father, Mother)]
+                                Father, Mother, Pairfp)]
 
 # x <- data.frame(x, "box.year.parentid" = paste(x$Box, x$year, x$parent,sep="_")) 
 
@@ -648,102 +648,102 @@ names(N_reference)[3] <- "year"
 DF$ring_ring <-(with(DF, paste(focal.ring, N.1.Mother, sep="_")))
 names(N_reference)[2] <- "N1.MOTHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN1.mother <- DF.temp[,c(3,60)] #box.year.parentid and the column we just made (N1.MOTHERfp)
+CN1.mother <- DF.temp[,c(3,61)] #box.year.parentid and the column we just made (N1.MOTHERfp)
 DF$ring_ring <-(with(DF, paste(focal.ring, N.1.Father, sep="_")))
 names(N_reference)[2] <- "N1.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN1.father<- DF.temp[,c(3,60)] #box.year.parentid and the column we just made (N1.FATHERfp)
+CN1.father<- DF.temp[,c(3,61)] #box.year.parentid and the column we just made (N1.FATHERfp)
 
 
 #N2 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.2.Mother, sep="_")))
 names(N_reference)[2] <- "N2.MOTHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN2.mother <- DF.temp[,c(3,60)]
+CN2.mother <- DF.temp[,c(3,61)]
 DF$ring_ring <-(with(DF, paste(focal.ring, N.2.Father, sep="_")))
 names(N_reference)[2] <- "N2.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN2.father<- DF.temp[,c(3,60)]
+CN2.father<- DF.temp[,c(3,61)]
 
 #N3
 DF$ring_ring <-(with(DF, paste(focal.ring, N.3.Mother, sep="_")))
 names(N_reference)[2] <- "N3.MOTHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN3.mother <- DF.temp[,c(3,60)]
+CN3.mother <- DF.temp[,c(3,61)]
 DF$ring_ring <-(with(DF, paste(focal.ring, N.3.Father, sep="_")))
 names(N_reference)[2] <- "N3.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN3.father<- DF.temp[,c(3,60)]
+CN3.father<- DF.temp[,c(3,61)]
 
 #N4 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.4.Mother, sep="_")))
 names(N_reference)[2] <- "N4.MOTHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN4.mother <- DF.temp[,c(3,60)]
+CN4.mother <- DF.temp[,c(3,61)]
 DF$ring_ring <-(with(DF, paste(focal.ring, N.4.Father, sep="_")))
 names(N_reference)[2] <- "N4.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN4.father<- DF.temp[,c(3,60)]
+CN4.father<- DF.temp[,c(3,61)]
 
 #N5 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.5.Mother, sep="_")))
 names(N_reference)[2] <- "N5.MOTHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN5.mother <- DF.temp[,c(3,60)]
+CN5.mother <- DF.temp[,c(3,61)]
 DF$ring_ring <-(with(DF, paste(focal.ring, N.5.Father, sep="_")))
 names(N_reference)[2] <- "N5.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN5.father<- DF.temp[,c(3,60)]
+CN5.father<- DF.temp[,c(3,61)]
 
 #N6 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.6.Mother, sep="_")))
 names(N_reference)[2] <- "N6.MOTHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN6.mother <- DF.temp[,c(3,60)]
+CN6.mother <- DF.temp[,c(3,61)]
 DF$ring_ring <-(with(DF, paste(focal.ring, N.6.Father, sep="_")))
 names(N_reference)[2] <- "N6.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN6.father<- DF.temp[,c(3,60)]
+CN6.father<- DF.temp[,c(3,61)]
 
 #N7 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.7.Mother, sep="_")))
 names(N_reference)[2] <- "N7.MOTHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN7.mother <- DF.temp[,c(3,60)]
+CN7.mother <- DF.temp[,c(3,61)]
 DF$ring_ring <-(with(DF, paste(focal.ring, N.7.Father, sep="_")))
 names(N_reference)[2] <- "N7.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN7.father<- DF.temp[,c(3,60)]
+CN7.father<- DF.temp[,c(3,61)]
 
 #N8 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.8.Mother, sep="_")))
 names(N_reference)[2] <- "N8.MOTHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN8.mother <- DF.temp[,c(3,60)]
+CN8.mother <- DF.temp[,c(3,61)]
 DF$ring_ring <-(with(DF, paste(focal.ring, N.8.Father, sep="_")))
 names(N_reference)[2] <- "N8.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN8.father<- DF.temp[,c(3,60)]
+CN8.father<- DF.temp[,c(3,61)]
 
 #N9 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.9.Mother, sep="_")))
 names(N_reference)[2] <- "N9.MOTHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN9.mother <- DF.temp[,c(3,60)]
+CN9.mother <- DF.temp[,c(3,61)]
 DF$ring_ring <-(with(DF, paste(focal.ring, N.9.Father, sep="_")))
 names(N_reference)[2] <- "N9.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN9.father<- DF.temp[,c(3,60)]
+CN9.father<- DF.temp[,c(3,61)]
 
 #N10 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.10.Mother, sep="_")))
 names(N_reference)[2] <- "N10.MOTHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN10.mother <- DF.temp[,c(3,60)]
+CN10.mother <- DF.temp[,c(3,61)]
 DF$ring_ring <-(with(DF, paste(focal.ring, N.10.Father, sep="_")))
 names(N_reference)[2] <- "N10.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
-CN10.father<- DF.temp[,c(3,60)]
+CN10.father<- DF.temp[,c(3,61)]
 
 
 #ok let's try to put them together?
