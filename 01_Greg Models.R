@@ -77,7 +77,7 @@ for(r in r:length(Resps)){
   IM2b <- INLAModelAdd(Data = TestDF, 
                        Response = Resps[r], 
                        Explanatory = Covar %>% c(IMList[[Resps[r]]]$Kept), 
-                       Add = paste0("Focal.sex:", IMList[[Resps[r]]]$Kept),
+                       Add = paste0("Focal.sex", IMList[[Resps[r]]]$Kept),
                        AllModels = T,
                        Base = T,
                        # Rounds = 1,
@@ -91,20 +91,20 @@ for(r in r:length(Resps)){
   
 }
 
-IMList %>% map("FinalModel") %>% 
+IMList2 %>% map("FinalModel") %>% 
   Efxplot(ModelNames = Resps, PointOutline = T) +
   scale_colour_brewer(palette = "Spectral") +
-  IMList %>% map(c("Spatial", "Model")) %>% 
+  IMList2 %>% map(c("Spatial", "Model")) %>% 
   Efxplot(ModelNames = Resps, PointOutline = T) +
   scale_colour_brewer(palette = "Spectral") +
   plot_layout(guides = "collect")
 
-IMList %>% 
+IMList2 %>% 
   map(~list(.x$FinalModel, .x$Spatial$Model) %>% INLADICFig) %>% 
   ArrangeCowplot()
 
-IMList %>% names %>% 
-  map(~ggField(IMList[[.x]]$Spatial$Model, IMList[[.x]]$Spatial$Mesh) + 
+IMList2 %>% names %>% 
+  map(~ggField(IMList2[[.x]]$Spatial$Model, IMList2[[.x]]$Spatial$Mesh) + 
         labs(fill = .x) +
         scale_fill_discrete_sequential(palette = "Mint")) %>% 
   ArrangeCowplot() + 
