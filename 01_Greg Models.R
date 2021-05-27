@@ -59,52 +59,52 @@ for(r in r:length(Resps)){
     mutate(fYear = Year) %>% 
     na.omit
   
-  # IM2 <- INLAModelAdd(Data = TestDF, 
-  #                     Response = Resps[r], 
-  #                     Explanatory = Covar, 
-  #                     Add = SocialCovar, # %>% c(DensityCovar),
-  #                     AllModels = T,
-  #                     Base = T,
-  #                     # Rounds = 1,
-  #                     # Clashes = ClashList,
-  #                     Random = c("Focal.ring", "fYear"), RandomModel = rep("iid", 2),
-  #                     AddSpatial = T,
-  #                     # Groups = T, 
-  #                     GroupVar = "fYear")
-  # 
-  # IMList[[Resps[r]]] <- IM2
+  IM2 <- INLAModelAdd(Data = TestDF,
+                      Response = Resps[r],
+                      Explanatory = Covar,
+                      Add = SocialCovar, # %>% c(DensityCovar),
+                      AllModels = T,
+                      Base = T,
+                      # Rounds = 1,
+                      # Clashes = ClashList,
+                      Random = c("Focal.ring", "fYear"), RandomModel = rep("iid", 2),
+                      AddSpatial = T,
+                      # Groups = T,
+                      GroupVar = "fYear")
+
+  IMList[[Resps[r]]] <- IM2
   
-  IM2b <- INLAModelAdd(Data = TestDF, 
-                       Response = Resps[r], 
-                       Explanatory = Covar %>% c(IMList[[Resps[r]]]$Kept), 
-                       Add = paste0("Focal.sex", IMList[[Resps[r]]]$Kept),
-                       AllModels = T,
-                       Base = T,
-                       # Rounds = 1,
-                       # Clashes = ClashList,
-                       Random = c("Focal.ring", "fYear"), RandomModel = rep("iid", 2),
-                       AddSpatial = T,
-                       # Groups = T, 
-                       GroupVar = "fYear")
+  # IM2b <- INLAModelAdd(Data = TestDF, 
+  #                      Response = Resps[r], 
+  #                      Explanatory = Covar %>% c(IMList[[Resps[r]]]$Kept), 
+  #                      Add = paste0("Focal.sex", IMList[[Resps[r]]]$Kept),
+  #                      AllModels = T,
+  #                      Base = T,
+  #                      # Rounds = 1,
+  #                      # Clashes = ClashList,
+  #                      Random = c("Focal.ring", "fYear"), RandomModel = rep("iid", 2),
+  #                      AddSpatial = T,
+  #                      # Groups = T, 
+  #                      GroupVar = "fYear")
   
-  IMList2[[Resps[r]]] <- IM2b
+  # IMList2[[Resps[r]]] <- IM2b
   
 }
 
-IMList2 %>% map("FinalModel") %>% 
+IMList %>% map("FinalModel") %>% 
   Efxplot(ModelNames = Resps, PointOutline = T) +
   scale_colour_brewer(palette = "Spectral") +
-  IMList2 %>% map(c("Spatial", "Model")) %>% 
+  IMList %>% map(c("Spatial", "Model")) %>% 
   Efxplot(ModelNames = Resps, PointOutline = T) +
   scale_colour_brewer(palette = "Spectral") +
   plot_layout(guides = "collect")
 
-IMList2 %>% 
+IMList %>% 
   map(~list(.x$FinalModel, .x$Spatial$Model) %>% INLADICFig) %>% 
   ArrangeCowplot()
 
-IMList2 %>% names %>% 
-  map(~ggField(IMList2[[.x]]$Spatial$Model, IMList2[[.x]]$Spatial$Mesh) + 
+IMList %>% names %>% 
+  map(~ggField(IMList[[.x]]$Spatial$Model, IMList[[.x]]$Spatial$Mesh) + 
         labs(fill = .x) +
         scale_fill_discrete_sequential(palette = "Mint")) %>% 
   ArrangeCowplot() + 
