@@ -64,37 +64,37 @@ for(r in r:length(Resps)){
     
   }
   
-  # print("Male!")
-  # 
-  # IMMale <- INLAModelAdd(Data = TestDF %>% filter(Focal.sex == "m"),
-  #                        Response = Resps[r],
-  #                        Explanatory = Covar,
-  #                        Add = SocialCovar, # %>% c(DensityCovar),
-  #                        # AllModels = T,
-  #                        Base = T,
-  #                        # Rounds = 1,
-  #                        Clashes = ClashList,
-  #                        Family = Families[Resps[r]],
-  #                        Random = c("Focal.ring", "fYear"), RandomModel = rep("iid", 2),
-  #                        AddSpatial = T,
-  #                        # Groups = T,
-  #                        GroupVar = "fYear")
-  # 
-  # print("Female!")
-  # 
-  # IMFemale <- INLAModelAdd(Data = TestDF %>% filter(Focal.sex == "f"),
-  #                          Response = Resps[r],
-  #                          Explanatory = Covar,
-  #                          Add = SocialCovar, # %>% c(DensityCovar),
-  #                          # AllModels = T,
-  #                          Base = T,
-  #                          # Rounds = 1,
-  #                          Clashes = ClashList,
-  #                          Family = Families[Resps[r]],
-  #                          Random = c("Focal.ring", "fYear"), RandomModel = rep("iid", 2),
-  #                          AddSpatial = T,
-  #                          # Groups = T,
-  #                          GroupVar = "fYear")
+  print("Male!")
+
+  IMMale <- INLAModelAdd(Data = TestDF %>% filter(Focal.sex == "m"),
+                         Response = Resps[r],
+                         Explanatory = Covar,
+                         Add = SocialCovar, # %>% c(DensityCovar),
+                         # AllModels = T,
+                         Base = T,
+                         # Rounds = 1,
+                         Clashes = ClashList,
+                         Family = Families[Resps[r]],
+                         Random = c("Focal.ring", "fYear"), RandomModel = rep("iid", 2),
+                         AddSpatial = T,
+                         # Groups = T,
+                         GroupVar = "fYear")
+
+  print("Female!")
+
+  IMFemale <- INLAModelAdd(Data = TestDF %>% filter(Focal.sex == "f"),
+                           Response = Resps[r],
+                           Explanatory = Covar,
+                           Add = SocialCovar, # %>% c(DensityCovar),
+                           # AllModels = T,
+                           Base = T,
+                           # Rounds = 1,
+                           Clashes = ClashList,
+                           Family = Families[Resps[r]],
+                           Random = c("Focal.ring", "fYear"), RandomModel = rep("iid", 2),
+                           AddSpatial = T,
+                           # Groups = T,
+                           GroupVar = "fYear")
   
   IMSubsampled <- INLAModelAdd(Data = TestDF %>% 
                                  group_by(BoxYear) %>% 
@@ -114,51 +114,15 @@ for(r in r:length(Resps)){
                                # Groups = T,
                                GroupVar = "fYear")
   
-  IMList[[Resps[r]]] <- list(#Male = IMMale, 
-                             #Female = IMFemale,
+  IMList[[Resps[r]]] <- list(Male = IMMale, 
+                             Female = IMFemale,
                              Subsampled = IMSubsampled)
   
 }
 
-IMList %>% 
-  map(~map(.x, "FinalModel")) %>% 
-  map(~Efxplot(.x, ModelNames = c("Male", "Female"))) %>% 
-  ArrangeCowplot() + plot_layout(guides = "collect")
-
-
-Efxplot(ModelNames = Resps, 
-        Intercept = F,
-        PointOutline = T) +
-  scale_colour_brewer(palette = "Spectral") +
-  IMList %>% map(c("Spatial", "Model")) %>% 
-  Efxplot(ModelNames = Resps, 
-          Intercept = F,
-          PointOutline = T) +
-  scale_colour_brewer(palette = "Spectral") +
-  plot_layout(guides = "collect")
-
-IMList %>% 
-  map(~list(.x$FinalModel, .x$Spatial$Model) %>% INLADICFig) %>% 
-  ArrangeCowplot()
-
-IMList %>% names %>% 
-  map(~ggField(IMList[[.x]]$Spatial$Model, IMList[[.x]]$Spatial$Mesh) + 
-        labs(fill = .x) +
-        scale_fill_discrete_sequential(palette = "Mint")) %>% 
-  ArrangeCowplot() + 
-  ggsave("Fields.jpeg", units = "mm", width = 400, height = 300)
-
-IMList2 %>% map("FinalModel") %>% 
-  Efxplot(ModelNames = Resps, 
-          Intercept = F,
-          PointOutline = T) +
-  scale_colour_brewer(palette = "Spectral") +
-  IMList2 %>% map(c("Spatial", "Model")) %>% 
-  Efxplot(ModelNames = Resps, 
-          Intercept = F,
-          PointOutline = T) +
-  scale_colour_brewer(palette = "Spectral") +
-  plot_layout(guides = "collect")
+IMList %>% map(c("Subsampled", "FinalModel")) %>% 
+  Efxplot(ModelNames = names(IMList), 
+          Intercept = F)
 
 # Trialling just adding the interactions ####
 
