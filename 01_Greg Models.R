@@ -2,9 +2,11 @@
 # 0_Greg Script ####
 
 library(tidyverse); library(magrittr); library(ggregplot); library(cowplot); library(colorspace)
-library(GGally); library(patchwork); library(dplyr)
+library(GGally); library(patchwork); library(dplyr); library(fs)
 
 theme_set(theme_cowplot())
+
+dir_create("Figures")
 
 DF <- readRDS("Data/fn.data.rds")
 
@@ -37,6 +39,9 @@ Covar <- c("Year", "Focal.sex") %>% setdiff("Focal.sex")
 SocialCovar <- c("N.num",
                  "N.num.maleind.familiar",
                  "N.num.femaleind.familiar",
+                 
+                 # "PrevDist",
+                 
                  "Pairfp"
 )
 
@@ -74,6 +79,8 @@ for(r in r:length(Resps)){
     
   }
   
+  print("Father!")
+  
   IM1 <- INLAModelAdd(Data = TestDF %>% filter(Focal.sex == "f"),
                       Response = Resps[r],
                       Explanatory = Covar,
@@ -91,6 +98,8 @@ for(r in r:length(Resps)){
                       # Groups = T,
                       Beep = F,
                       GroupVar = "fYear")
+  
+  print("Mother!")
   
   IM2 <- INLAModelAdd(Data = TestDF %>% filter(Focal.sex == "m"),
                       Response = Resps[r],
@@ -110,8 +119,37 @@ for(r in r:length(Resps)){
                       Beep = F,
                       GroupVar = "fYear")
   
-  IMList[[Resps[r]]]$Female <- IM1
-  IMList[[Resps[r]]]$Male <- IM2
+  IMList[[Resps[r]]]$Father <- IM1
+  IMList[[Resps[r]]]$Mother <- IM2
   
 }
+
+IMList %>% map("Father") %>% map("FinalModel") %>% Efxplot(ModelNames = Resps) +
+  
+  ggtitle("Father") +
+  
+  IMList %>% map("Mother") %>% map("FinalModel") %>% Efxplot(ModelNames = Resps) +
+  
+  ggtitle("Mother") +
+  
+  plot_layout(guides = "collect")
+
+ggsave("Figures/BaseModelOutput.jpeg", units = "mm", height = 180, width = 250)
+
+IMList %>% map("Father") %>% map(c("Spatial", "Model")) %>% Efxplot(ModelNames = Resps) +
+  
+  ggtitle("Father") +
+  
+  IMList %>% map("Mother") %>% map(c("Spatial", "Model")) %>% Efxplot(ModelNames = Resps) +
+  
+  ggtitle("Mother") +
+  
+  plot_layout(guides = "collect")
+
+ggsave("Figures/SPDEModelOutput.jpeg", units = "mm", height = 180, width = 250)
+
+IMList %>% map("Female") %>% map("FinalModel") %>% map("dDIC")
+
+IMList %>% map("Male") %>% map("FinalModel") %>% map("dDIC")
+
 
