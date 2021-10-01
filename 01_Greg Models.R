@@ -8,9 +8,12 @@ theme_set(theme_cowplot())
 
 dir_create("Figures")
 
-DF <- readRDS("Data/fn.data.rds")
+# DF <- readRDS("Data/fn.data.rds")
+DF <- readRDS("Data/fn.data.full.rds")
 
-DF %<>% mutate(Pair = paste0(Mother, "_", Father))
+DF <- DF[!duplicated(colnames(DF))]
+
+DF %<>% mutate(Pair = paste0(Male, "_", Female))
 
 DF %<>% mutate(BoxYear = paste0(Box, "_", Year))
 
@@ -34,18 +37,24 @@ Families <- c("gaussian", "binomial",
 
 names(Families) <- Resps
 
-Covar <- c("Year", "Focal.sex") %>% setdiff("Focal.sex")
+Covar <- c("Year", 
+           "Largeoaks",
+           "Age_num",
+           "Focal.sex") %>% setdiff("Focal.sex")
 
 SocialCovar <- c("N.num",
                  "N.num.maleind.familiar",
                  "N.num.femaleind.familiar",
+                 
+                 "N.prop.maleind.familiar",
+                 "N.prop.femaleind.familiar",
                  
                  # "PrevDist",
                  
                  "Pairfp"
 )
 
-ClashList <- list(SocialCovar[1:3])
+ClashList <- list(SocialCovar[1:5])
 # ClashList <- list()
 
 IMList <- 
@@ -79,7 +88,7 @@ for(r in r:length(Resps)){
     
   }
   
-  print("Father!")
+  print("Female!")
   
   IM1 <- INLAModelAdd(Data = TestDF %>% filter(Focal.sex == "f"),
                       Response = Resps[r],
@@ -99,7 +108,7 @@ for(r in r:length(Resps)){
                       Beep = F,
                       GroupVar = "fYear")
   
-  print("Mother!")
+  print("Male!")
   
   IM2 <- INLAModelAdd(Data = TestDF %>% filter(Focal.sex == "m"),
                       Response = Resps[r],
@@ -119,30 +128,40 @@ for(r in r:length(Resps)){
                       Beep = F,
                       GroupVar = "fYear")
   
-  IMList[[Resps[r]]]$Father <- IM1
-  IMList[[Resps[r]]]$Mother <- IM2
+  IMList[[Resps[r]]]$Female <- IM1
+  IMList[[Resps[r]]]$Male <- IM2
   
 }
 
-IMList %>% map("Father") %>% map("FinalModel") %>% Efxplot(ModelNames = Resps) +
+# IMList %>% saveRDS("IMList.rds")
+
+IMList %>% map("Female") %>% map("FinalModel") %>% 
+  Efxplot(Intercept = F,
+          ModelNames = Resps) +
   
-  ggtitle("Father") +
+  ggtitle("Female") +
   
-  IMList %>% map("Mother") %>% map("FinalModel") %>% Efxplot(ModelNames = Resps) +
+  IMList %>% map("Male") %>% map("FinalModel") %>% 
+  Efxplot(Intercept = F,
+          ModelNames = Resps) +
   
-  ggtitle("Mother") +
+  ggtitle("Male") +
   
   plot_layout(guides = "collect")
 
 ggsave("Figures/BaseModelOutput.jpeg", units = "mm", height = 180, width = 250)
 
-IMList %>% map("Father") %>% map(c("Spatial", "Model")) %>% Efxplot(ModelNames = Resps) +
+IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
+  Efxplot(Intercept = F,
+          ModelNames = Resps) +
   
-  ggtitle("Father") +
+  ggtitle("Female") +
   
-  IMList %>% map("Mother") %>% map(c("Spatial", "Model")) %>% Efxplot(ModelNames = Resps) +
+  IMList %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
+  Efxplot(Intercept = F,
+          ModelNames = Resps) +
   
-  ggtitle("Mother") +
+  ggtitle("Male") +
   
   plot_layout(guides = "collect")
 
