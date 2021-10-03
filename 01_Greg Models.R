@@ -40,21 +40,24 @@ names(Families) <- Resps
 Covar <- c("Year", 
            "Largeoaks",
            "Age_num",
+           "Pairfp",
            "Focal.sex") %>% setdiff("Focal.sex")
 
-SocialCovar <- c("N.num",
-                 "N.num.maleind.familiar",
-                 "N.num.femaleind.familiar",
-                 
-                 "N.prop.maleind.familiar",
-                 "N.prop.femaleind.familiar",
-                 
-                 # "PrevDist",
-                 
-                 "Pairfp"
+SocialCovar <- c(#"N.num",
+  # "N.num.ind.familiar",
+  # "N.num.maleind.familiar",
+  # "N.num.femaleind.familiar"
+  
+  "N.prop.maleind.familiar",
+  "N.prop.femaleind.familiar",
+  "N.prop.ind.familiar"
+  
+  # "PrevDist",
+  
+  # "Pairfp"
 )
 
-ClashList <- list(SocialCovar[1:5])
+ClashList <- list(SocialCovar[1:3])
 # ClashList <- list()
 
 IMList <- 
@@ -133,7 +136,7 @@ for(r in r:length(Resps)){
   
 }
 
-# IMList %>% saveRDS("IMList.rds")
+IMList %>% saveRDS("IMListNumber.rds")
 
 IMList %>% map("Female") %>% map("FinalModel") %>% 
   Efxplot(Intercept = F,
@@ -149,7 +152,7 @@ IMList %>% map("Female") %>% map("FinalModel") %>%
   
   plot_layout(guides = "collect")
 
-ggsave("Figures/BaseModelOutput.jpeg", units = "mm", height = 180, width = 250)
+ggsave("Figures/BaseModelOutputNumber.jpeg", units = "mm", height = 180, width = 250)
 
 IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
   Efxplot(Intercept = F,
@@ -165,10 +168,41 @@ IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>%
   
   plot_layout(guides = "collect")
 
-ggsave("Figures/SPDEModelOutput.jpeg", units = "mm", height = 180, width = 250)
+ggsave("Figures/SPDEModelOutputNumber.jpeg", units = "mm", height = 180, width = 250)
 
-IMList %>% map("Female") %>% map("FinalModel") %>% map("dDIC")
+IMList %>% map(c("Female", "AllModels", 1)) %>% map(~map(.x, "dDIC"))
+
+(IMList %>% map(c("Female", "AllModels")) %>% map(2) %>%
+  map(~Efxplot(.x, VarOrder = SocialCovar))) %>% 
+  append(
+
+(IMList %>% map(c("Male", "AllModels")) %>% map(2) %>%
+  map(~Efxplot(.x, VarOrder = SocialCovar)))) %>% 
+  ArrangeCowplot() +
+  plot_layout(guides = "collect", 
+              ncol = 5)
+
+ggsave("Figures/AllOutputsProportion.jpeg", units = "mm", height = 180, width = 350)
 
 IMList %>% map("Male") %>% map("FinalModel") %>% map("dDIC")
 
-
+IMList %>% 
+  map(function(a){
+    
+    a %>% map(function(b){
+      
+      b$FinalModel$summary.fixed %>% as.data.frame() %>% 
+        rownames_to_column() %>% 
+        rename(Variable = rowname)
+      
+    }) %>% bind_rows(.id = "Sex") %>% 
+      select(Sex, 
+             Variable,
+             Estimate = mean,
+             Lower = `0.025quant`,
+             Upper = `0.975quant`) %>% 
+      mutate_at(2:4+1, ~round(.x, 3)) %>% 
+      mutate(Significant = as.numeric(Lower*Upper > 0))
+    
+  }) %>% 
+  saveRDS("ModelOutputs.rds")
