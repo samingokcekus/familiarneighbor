@@ -2,7 +2,7 @@
 # Greg editing Samin's workflow ####
 # setwd("~/Documents/2/Familiar_neighbors/DATA") # Don't use this, use a project
 
-library(sf); library(tidyverse); library(magrittr)
+library(sf); library(tidyverse); library(magrittr); library(readxl)
 
 #load in data
 raw.breeding.data <- read.csv("Data/BREEDINGDATA.csv") # This needs to be in the repo
@@ -110,8 +110,6 @@ xdata2$focal.sex <- with(xdata2, ifelse(parent == "mother", "F",
                                       xdata2$focal.sex)) 
 xdata2$focal.sex <- with(xdata2, ifelse(parent == "father", "M", 
                                       xdata2$focal.sex)) 
-
-xdata2 %<>% mutate(focal.sex = substr(parent, 1, 1))
 
 #add binary success fitness variable 
 xdata2 %<>% mutate(Binary.succ = as.numeric(Num.fledglings > 0))
@@ -649,7 +647,7 @@ fn.data <- fn.data.temp[which(fn.data.temp$age_cat=="adult"),]
 
 
 ###adding oak health info#### 
-HQ <- read_excel("~/Documents/2/Familiar_neighbors/familiarneighbor/Data/Habitatqualitydata.xls")
+HQ <- read_excel("Habitatqualitydata.xls")
 names(HQ)[1] <- "Box"
 HQ$Box <- toupper(HQ$Box)
 names(HQ)[2] <- "Largeoaks"
@@ -698,4 +696,4 @@ fn.data.clean <- fn3[,c("Box","Focal.ring","Year", "Box.year.parentid", "X", "Y"
 
 saveRDS(fn.data.clean, "fn.data.clean.Rds")
 
-
+table(fn3$Parent, fn3$Focal.sex)
