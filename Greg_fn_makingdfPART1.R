@@ -1,16 +1,15 @@
 
 # Greg editing Samin's workflow ####
-# setwd("~/Documents/2/Familiar_neighbors/DATA") # Don't use this, use a project
-
-library(sf); library(tidyverse); library(magrittr); library(readxl)
+library(sf); library(tidyverse); library(magrittr); library(readxl); library(sp)
 
 #load in data
-raw.breeding.data <- read.csv("Data/BREEDINGDATA.csv") # This needs to be in the repo
-nestbox.data <- read.csv("Data/Nestboxes.csv")
-wood.outline <- sf::st_read("Data/perimeter poly with clearings_region.shp")
-wood.outline <- wood.outline[1,] #keep first polygon
+#raw.breeding.data <- read.csv("Data/BREEDINGDATA.csv") # This needs to be in the repo
+#nestbox.data <- read.csv("Data/Nestboxes.csv")
+#wood.outline <- sf::st_read("Data/perimeter poly with clearings_region.shp")
+#wood.outline <- wood.outline[1,] #keep first polygon
 
 #temp
+setwd("~/Documents/2/Familiar_neighbors/DATA")
 raw.breeding.data <- read.csv("BREEDINGDATA.csv") # This needs to be in the repo
 raw.breeding.data$Father <- toupper(raw.breeding.data$Father)
 raw.breeding.data$Mother <- toupper(raw.breeding.data$Mother)
@@ -116,7 +115,7 @@ xdata2 %<>% mutate(Binary.succ = as.numeric(Num.fledglings > 0))
 
 base.fn.data <- xdata2
 
-rm(xdata)
+
 rm(xdata2)
 
 ###get a version of the breeding data for finding neighbors 
@@ -146,22 +145,17 @@ bbox_polygon <- function(x) {
 }
 
 FocalYears <- breeding.data.neighbors$year %>% unique %>% sort
-
 FocalYears <- FocalYears[FocalYears >= 1964]
-
 FocalYear <- FocalYears[1]
 
 NeighbourReferenceList <- list()
 TerritoriesListList <- list()
-
-FocalYear <- FocalYears[1]
 
 # Beginning of loop ####
 
 for(FocalYear in FocalYears){
   
   print(FocalYear)
-  
   
   breeding.data.1964 <- breeding.data.neighbors %>% filter(year == FocalYear)
   
@@ -265,10 +259,8 @@ for(FocalYear in FocalYears){
 
 NEIOutputList <- list()
 
-FocalYears <- xdata$year %>% unique %>% sort
-
+FocalYears <- breeding.data.neighbors$year %>% unique %>% sort
 FocalYears <- FocalYears[FocalYears >= 1965]
-
 FocalYear <- FocalYears[1]
 
 for(FocalYear in FocalYears){ 
@@ -346,8 +338,7 @@ for(FocalYear in FocalYears){
   
 }
 
-# Combine everything in this list using this ####
-
+# combine all info from list ####
 newdata <- NEIOutputList %>% bind_rows(.id = "Year")
 
 ###### 
@@ -405,6 +396,9 @@ names(N_reference)[2] <- "N1.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
 CN1.father<- DF.temp[,c(3,73)] #box.year.parentid and the column we just made (N1.FATHERfp)
 
+CN1.mother <- unique(CN1.mother)
+CN1.father <- unique(CN1.father)
+
 
 #N2 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.2.Mother, sep="_")))
@@ -416,6 +410,9 @@ names(N_reference)[2] <- "N2.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
 CN2.father<- DF.temp[,c(3,73)]
 
+CN2.mother <- unique(CN2.mother)
+CN2.father <- unique(CN2.father)
+
 #N3
 DF$ring_ring <-(with(DF, paste(focal.ring, N.3.Mother, sep="_")))
 names(N_reference)[2] <- "N3.MOTHERfp"
@@ -425,6 +422,9 @@ DF$ring_ring <-(with(DF, paste(focal.ring, N.3.Father, sep="_")))
 names(N_reference)[2] <- "N3.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
 CN3.father<- DF.temp[,c(3,73)]
+
+CN3.mother <- unique(CN3.mother)
+CN3.father <- unique(CN3.father)
 
 #N4 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.4.Mother, sep="_")))
@@ -436,6 +436,9 @@ names(N_reference)[2] <- "N4.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
 CN4.father<- DF.temp[,c(3,73)]
 
+CN4.mother <- unique(CN4.mother)
+CN4.father <- unique(CN4.father)
+
 #N5 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.5.Mother, sep="_")))
 names(N_reference)[2] <- "N5.MOTHERfp"
@@ -445,6 +448,9 @@ DF$ring_ring <-(with(DF, paste(focal.ring, N.5.Father, sep="_")))
 names(N_reference)[2] <- "N5.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
 CN5.father<- DF.temp[,c(3,73)]
+
+CN5.mother <- unique(CN5.mother)
+CN5.father <- unique(CN5.father)
 
 #N6 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.6.Mother, sep="_")))
@@ -456,6 +462,9 @@ names(N_reference)[2] <- "N6.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
 CN6.father<- DF.temp[,c(3,73)]
 
+CN6.mother <- unique(CN6.mother)
+CN6.father <- unique(CN6.father)
+
 #N7 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.7.Mother, sep="_")))
 names(N_reference)[2] <- "N7.MOTHERfp"
@@ -465,6 +474,9 @@ DF$ring_ring <-(with(DF, paste(focal.ring, N.7.Father, sep="_")))
 names(N_reference)[2] <- "N7.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
 CN7.father<- DF.temp[,c(3,73)]
+
+CN7.mother <- unique(CN7.mother)
+CN7.father <- unique(CN7.father)
 
 #N8 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.8.Mother, sep="_")))
@@ -476,6 +488,9 @@ names(N_reference)[2] <- "N8.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
 CN8.father<- DF.temp[,c(3,73)]
 
+CN8.mother <- unique(CN8.mother)
+CN8.father <- unique(CN8.father)
+
 #N9 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.9.Mother, sep="_")))
 names(N_reference)[2] <- "N9.MOTHERfp"
@@ -485,6 +500,9 @@ DF$ring_ring <-(with(DF, paste(focal.ring, N.9.Father, sep="_")))
 names(N_reference)[2] <- "N9.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
 CN9.father<- DF.temp[,c(3,73)]
+
+CN9.mother <- unique(CN9.mother)
+CN9.father <- unique(CN9.father)
 
 #N10 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.10.Mother, sep="_")))
@@ -496,6 +514,9 @@ names(N_reference)[2] <- "N10.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
 CN10.father<- DF.temp[,c(3,73)]
 
+CN10.mother <- unique(CN10.mother)
+CN10.father <- unique(CN10.father)
+
 #N11 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.11.Mother, sep="_")))
 names(N_reference)[2] <- "N11.MOTHERfp"
@@ -505,6 +526,9 @@ DF$ring_ring <-(with(DF, paste(focal.ring, N.11.Father, sep="_")))
 names(N_reference)[2] <- "N11.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
 CN11.father<- DF.temp[,c(3,73)]
+
+CN11.mother <- unique(CN11.mother)
+CN11.father <- unique(CN11.father)
 
 #N12 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.12.Mother, sep="_")))
@@ -516,6 +540,9 @@ names(N_reference)[2] <- "N12.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
 CN12.father<- DF.temp[,c(3,73)]
 
+CN12.mother <- unique(CN12.mother)
+CN12.father <- unique(CN12.father)
+
 #N13 
 DF$ring_ring <-(with(DF, paste(focal.ring, N.13.Mother, sep="_")))
 names(N_reference)[2] <- "N13.MOTHERfp"
@@ -525,6 +552,9 @@ DF$ring_ring <-(with(DF, paste(focal.ring, N.13.Father, sep="_")))
 names(N_reference)[2] <- "N13.FATHERfp"
 DF.temp <- merge(DF, N_reference, by=c("ring_ring", "year"), all.x=TRUE)
 CN13.father<- DF.temp[,c(3,73)]
+
+CN13.mother <- unique(CN13.mother)
+CN13.father <- unique(CN13.father)
 
 #ok let's try to put them together?
 
@@ -559,16 +589,7 @@ DF$ring_ring <- NULL
 DF.temp <- merge(DF, x, by="box.year.parentid", all.x=TRUE)
 
 
-####HERE #### 
-
-test1 <- as.data.frame(order(DF$box.year.parentid))
-test2 <- as.data.frame(order(DF.temp$box.year.parentid))
-summary(arsenal::comparedf(test1, test2))
-summary(arsenal::comparedf(DF, DF.temp))
-x <- DF.temp[order(DF.temp$box.year.parentid),]
-DF.temp <- DF.temp[c(1:18240),]
-
-
+###add familiarity info ####
 #familiarity to mothers 
 temp <- as.data.frame((is.na(DF.temp[,c("N1.MOTHERfp","N2.MOTHERfp", "N3.MOTHERfp","N4.MOTHERfp",  "N5.MOTHERfp",  "N6.MOTHERfp",  "N7.MOTHERfp","N8.MOTHERfp", "N9.MOTHERfp" ,"N10.MOTHERfp","N11.MOTHERfp", "N12.MOTHERfp", "N13.MOTHERfp")])))
 temp %>% mutate_if(is.logical,as.numeric) -> temp
@@ -658,6 +679,92 @@ fn.data <- merge(fn.data, HQ, by=c("Box"), all.x=TRUE)
 colnames(fn.data) <- stringr::str_to_title(colnames(fn.data))
 
 
+####add distance moved from previous year for each individual ####
+
+#make a base data frame to pull info from 
+x <- breeding.data[which(breeding.data$year > 1972),] #filter year
+x %<>% filter(attempt == 1) #only first attempt
+x <- x %>% filter(Species == "g") #greti only
+
+#keep only relevant columns
+x <- data.table::setDT(x)[, .(parent = c("mother","father")), 
+                          .(year, Box, x, y,Father, Mother)]
+x <- as.data.frame(x)
+
+parents <- x
+
+#get the focal ring 
+parents$focal.ring <- NA
+parents$focal.ring <- with(x, ifelse(parent == "mother", parents$Mother, parents$focal.ring)) 
+parents$focal.ring <- with(x, ifelse(parent == "father", parents$Father, parents$focal.ring)) 
+x <- parents
+
+#remove rows without a focal 
+x %<>% 
+  mutate_at(c("focal.ring"), 
+            ~.x %>% as.character) %>% 
+  mutate_at(c("focal.ring"), 
+            ~ifelse(.x == "", NA, .x))
+
+x <- as.data.frame(x)
+
+x <- x[!is.na(x$focal.ring), ]
+
+x <- x %>% mutate(year.focal = paste(year, focal.ring, sep = "_"))
+
+#make another dataframe that has info about the previous year 
+y <- x[,c(1,2,3,4,8)]
+#rename to have informative columns 
+names(y)[2] <- "box.prev"
+names(y)[3] <- "x.prev"
+names(y)[4] <- "y.prev"
+y$year <- y$year + 1
+
+y <- y %>% mutate(year.focal = paste(year, focal.ring, sep = "_"))
+
+y$year <- NULL 
+y$focal.ring <- NULL
+z <- merge(x, y, by="year.focal", all.x=TRUE)
+
+z <- z[!duplicated(z[ , "year.focal"]), ] 
+z <- z[which(z$year > 1973),]
+
+z <- z[which(!is.na(z$x)),]
+z <- z[which(!is.na(z$x.prev)),]
+
+z$x <- as.numeric(z$x)
+z$y <- as.numeric(z$y)
+z$x.prev <- as.numeric(z$x.prev)
+z$y.prev <- as.numeric(z$y.prev)
+
+#get points of current box 
+box.xy <- z[,c(4,5)]
+box.points <- SpatialPoints(box.xy) #turn to point object
+
+#and of previous box 
+box.xy.prev <- z[,c(11,12)]
+box.points.prev <- SpatialPoints(box.xy.prev) #turn to point object
+
+#get distances 
+library(raster)
+distance <- pointDistance(box.points, box.points.prev, lonlat=FALSE)
+z$distance <- distance #add it back to the df 
+
+z <- z %>% mutate(Box.year.parentid = paste(Box, year, parent, sep = "_"))
+
+dist.info <- z[,c(13,14)]
+
+#remove the extra year column in fn.data 
+names(fn.data)[27] <- "null"
+fn.data$null<- NULL
+
+fn.data <- merge(fn.data, dist.info, by="Box.year.parentid", all.x=TRUE) #add the info to the base 
+
+#uppercase column names 
+colnames(fn.data) <- stringr::str_to_title(colnames(fn.data))
+
+
+
 #datachecks/cleanup
 fn <- fn.data
 plot(table(fn$Year)) 
@@ -691,8 +798,9 @@ saveRDS(fn3, "fn.data.full.Rds")
 
 fn.data.clean <- fn3[,c("Box","Focal.ring","Year", "Box.year.parentid", "X", "Y", "April.lay.date",
                        "Clutch.size", "Num.fledglings", "Mean.chick.weight", "Pairfp", "Focal.sex", "Binary.succ", 
-                       "N.num", "N.num.female.id", "N.num.male.id", "N.num.femaleind.familiar", "N.prop.femaleind.familiar", 
-                       "N.num.maleind.familiar", "N.prop.maleind.familiar", "N.prop.ind.familiar", "Age_num", "Age_cat", "Largeoaks")]
+                       "N.num", "N.num.female.id", "N.num.male.id", "N.num.ind.familiar", "N.num.femaleind.familiar", 
+                       "N.prop.femaleind.familiar", "N.num.maleind.familiar", "N.prop.maleind.familiar", "N.prop.ind.familiar", 
+                       "Age_num", "Age_cat", "Largeoaks", "Distance")]
 
 saveRDS(fn.data.clean, "fn.data.clean.Rds")
 
