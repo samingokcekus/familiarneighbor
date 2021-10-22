@@ -120,7 +120,7 @@ for(r in r:length(Resps)){
   
 }
 
-#IMList %>% saveRDS("IMListNumber.rds")
+IMList %>% saveRDS("IMListNumber.rds")
 
 IMList %>% map("Female") %>% map("FinalModel") %>% 
   Efxplot(Intercept = F,
@@ -157,6 +157,9 @@ ggsave("updatedFigures/SPDEModelOutputNumber.jpeg", units = "mm", height = 180, 
 
 #get model outputs####
 
+IMList %>% map("Male") %>% map("FinalModel") %>% map("dDIC")
+
+
 IMList %>% 
   map(function(a){
     
@@ -177,6 +180,29 @@ IMList %>%
     
   }) %>% 
   saveRDS("updatedFigures/NumberModelOutputs.rds")
+
+
+IMList %>% 
+  map(function(a){
+    
+    a %>% map(function(b){
+      
+      b$Spatial$Model$summary.fixed %>% as.data.frame() %>% 
+        rownames_to_column() %>% 
+        rename(Variable = rowname)
+      
+    }) %>% bind_rows(.id = "Sex") %>% 
+      select(Sex, 
+             Variable,
+             Estimate = mean,
+             Lower = `0.025quant`,
+             Upper = `0.975quant`) %>% 
+      mutate_at(2:4+1, ~round(.x, 3)) %>% 
+      mutate(Significant = as.numeric(Lower*Upper > 0))
+    
+  }) %>% 
+  saveRDS("updatedFigures/NumberModelOutputsSPDE.rds")
+
 
 
 
@@ -480,11 +506,7 @@ ggsave("updatedFigures/BaseModelForceProp.jpeg", plot = summary.prop, units = "m
 ggsave("updatedFigures/SPDEModelForceProp.jpeg", plot = summary.prop.spatial, units = "mm", height = 180, width = 250)
 
 
-saveRDS(female.clutch.prop, "updatedFigures/female.clutch.prop.rds")
-saveRDS(female.lay.prop, "updatedFigures/female.lay.prop.rds")
-saveRDS(female.lay.prop, "updatedFigures/male.clutch.prop.rds")
 
-readRDS("updatedFigures/female.clutch.prop.rds")
 
 female.clutch.prop %>% 
   map(function(a){
@@ -507,6 +529,28 @@ female.clutch.prop %>%
   }) %>% 
   saveRDS("updatedFigures/female.clutch.prop.rds")
 
+female.clutch.prop %>% 
+  map(function(a){
+    
+    a %>% map(function(b){
+      
+      b$Spatial$Model$summary.fixed %>% as.data.frame() %>% 
+        rownames_to_column() %>% 
+        rename(Variable = rowname)
+      
+    }) %>% bind_rows(.id = "Sex") %>% 
+      select(Sex, 
+             Variable,
+             Estimate = mean,
+             Lower = `0.025quant`,
+             Upper = `0.975quant`) %>% 
+      mutate_at(2:4+1, ~round(.x, 3)) %>% 
+      mutate(Significant = as.numeric(Lower*Upper > 0))
+    
+  }) %>% 
+  saveRDS("updatedFigures/female.clutch.propSPDE.rds")
+
+
 female.lay.prop %>% 
   map(function(a){
     
@@ -527,6 +571,28 @@ female.lay.prop %>%
     
   }) %>% 
   saveRDS("updatedFigures/female.lay.prop.rds")
+
+female.lay.prop %>% 
+  map(function(a){
+    
+    a %>% map(function(b){
+      
+      b$Spatial$Model$summary.fixed %>% as.data.frame() %>% 
+        rownames_to_column() %>% 
+        rename(Variable = rowname)
+      
+    }) %>% bind_rows(.id = "Sex") %>% 
+      select(Sex, 
+             Variable,
+             Estimate = mean,
+             Lower = `0.025quant`,
+             Upper = `0.975quant`) %>% 
+      mutate_at(2:4+1, ~round(.x, 3)) %>% 
+      mutate(Significant = as.numeric(Lower*Upper > 0))
+    
+  }) %>% 
+  saveRDS("updatedFigures/female.lay.propSPDE.rds")
+
 
 
 male.clutch.prop %>% 
@@ -550,4 +616,24 @@ male.clutch.prop %>%
   }) %>% 
   saveRDS("updatedFigures/male.clutch.prop.rds")
 
+male.clutch.prop %>% 
+  map(function(a){
+    
+    a %>% map(function(b){
+      
+      b$Spatial$Model$summary.fixed %>% as.data.frame() %>% 
+        rownames_to_column() %>% 
+        rename(Variable = rowname)
+      
+    }) %>% bind_rows(.id = "Sex") %>% 
+      select(Sex, 
+             Variable,
+             Estimate = mean,
+             Lower = `0.025quant`,
+             Upper = `0.975quant`) %>% 
+      mutate_at(2:4+1, ~round(.x, 3)) %>% 
+      mutate(Significant = as.numeric(Lower*Upper > 0))
+    
+  }) %>% 
+  saveRDS("updatedFigures/male.clutch.propSPDE.rds")
 
