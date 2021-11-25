@@ -682,7 +682,7 @@ colnames(fn.data) <- stringr::str_to_title(colnames(fn.data))
 ####add distance moved from previous year for each individual ####
 
 #make a base data frame to pull info from 
-x <- breeding.data[which(breeding.data$year > 1972),] #filter year
+x <- breeding.data 
 x %<>% filter(attempt == 1) #only first attempt
 x <- x %>% filter(Species == "g") #greti only
 
