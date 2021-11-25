@@ -241,7 +241,7 @@ for(FocalYear in FocalYears){
                               N1964.e = paste(Focal.female, Neighboring.male, sep="_")) %>% 
     dplyr::select(contains("N1964"))
   
-  N1964 %<>% gather(value = "ring_ring") %>% select(ring_ring)
+  N1964 %<>% gather(value = "ring_ring") %>% dplyr::select(ring_ring)
   
   N1964$neighbors <- TRUE
   N1964$Year.s <- FocalYear + 1
@@ -370,7 +370,7 @@ base.fn.data.temp <- merge(base.fn.data, newdata, by="box.year.parentid", all.x=
 base.fn.data.temp <- base.fn.data.temp[which(!is.na(base.fn.data.temp$x)),]
 
 #only keep after 1973 
-base.fn.data.temp <- base.fn.data.temp[which(base.fn.data.temp$year > "1973"),]
+#base.fn.data.temp <- base.fn.data.temp[which(base.fn.data.temp$year > "1973"),]
 
 
 #### HEREE ##### 
@@ -727,7 +727,7 @@ y$focal.ring <- NULL
 z <- merge(x, y, by="year.focal", all.x=TRUE)
 
 z <- z[!duplicated(z[ , "year.focal"]), ] 
-z <- z[which(z$year > 1973),]
+#z <- z[which(z$year > 1973),]
 
 z <- z[which(!is.na(z$x)),]
 z <- z[which(!is.na(z$x.prev)),]
@@ -794,7 +794,11 @@ mean(fath.b$Mother ==moth.b$Mother)
 
 #DONE
 
-saveRDS(fn3, "fn.data.full.Rds")
+#only keep after 1973 
+fn4 <- fn3[which(fn3$year > "1973"),]
+
+saveRDS(fn3, "fn.data.full.ALLYEARS.Rds")
+saveRDS(fn4, "fn.data.full.Rds")
 
 fn.data.clean <- fn3[,c("Box","Focal.ring","Year", "Box.year.parentid", "X", "Y", "April.lay.date",
                        "Clutch.size", "Num.fledglings", "Mean.chick.weight", "Pairfp", "Focal.sex", "Binary.succ", 
