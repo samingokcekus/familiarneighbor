@@ -889,7 +889,7 @@ IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>%
 
 ggsave("allYear/SPDEModelOutputNumber.suppid.jpeg", units = "mm", height = 180, width = 250)
 
-####supplementary only inds with nearest two neighbors identified####
+####supplementary only inds with nearest neighbor identified####
 DFsupp <- readRDS("Data/fn.data.full.ALLYEARS.rds")
 
 DFsupp <- DFsupp[which(!is.na(DFsupp$N.1.Mother) & !is.na(DFsupp$N.1.Father)),]
@@ -1074,9 +1074,169 @@ IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>%
 
 ggsave("allYear/SPDEModelOutputNumber.suppid.jpeg", units = "mm", height = 180, width = 250)
 
-IMList %>% names %>% 
-  map(~ggField(IMList[[.x]]$Female$Spatial$Model, IMList[[.x]]$Female$Spatial$Mesh) + 
-        labs(fill = .x) +
-        scale_fill_discrete_sequential(palette = "Mint")) %>% 
-  ArrangeCowplot() 
-  #ggsave("Fields.jpeg", units = "mm", width = 400, height = 300)
+
+
+#### age without familiar neighbor info #### 
+
+age.data <- readRDS("Data/data.nofn.rds")
+
+age.data %<>% mutate(Pair = paste0(Father, "_", Mother))
+age.data %<>% mutate(BoxYear = paste0(Box, "_", Year))
+
+Resps <- c(#"April.hatch.date",
+  "April.lay.date",
+  "Binary.succ",
+  "Clutch.size",
+  "Mean.chick.weight",
+  "Num.fledglings") %>% 
+  sort
+
+Families <- c("gaussian", "binomial", 
+              rep("gaussian", 3))
+
+names(Families) <- Resps
+
+Covar <- c("Year", 
+           "Largeoaks",
+           "Age_num",
+           "Focal.sex") %>% setdiff("Focal.sex")
+
+
+ClashList <- list(SocialCovar[1:3])
+# ClashList <- list()
+
+IMList <- 
+  IMList2 <- 
+  list()
+
+# Overall ####
+
+r <- 1
+
+for(r in r:length(Resps)){
+  
+  print(Resps[r])
+  
+  TestDF <- age.data %>% 
+    dplyr::select(all_of(Covar), 
+                  Focal.ring,
+                  Focal.sex,
+                  BoxYear,
+                  Resps[r], X, Y) %>% 
+    mutate(fYear = Year) %>% 
+    na.omit
+  
+  TestDF %>% nrow %>% print
+  
+  if(Resps[r] == "April.lay.date"){
+    
+    TestDF %<>% 
+      filter(April.lay.date < 55)
+    
+  }
+  
+  print("Female!")
+  
+  IM1 <- INLAModelAdd(Data = TestDF %>% filter(Focal.sex == "F"),
+                      Response = Resps[r],
+                      Explanatory = Covar,
+                      AllModels = T,
+                      Base = T,
+                      # Rounds = 1,
+                      Clashes = ClashList,
+                      Family = Families[Resps[r]],
+                      Random = c("Focal.ring", 
+                                 # "BoxYear", 
+                                 "fYear"), 
+                      RandomModel = rep("iid", 3),
+                      AddSpatial = T,
+                      # Groups = T,
+                      Beep = F,
+                      GroupVar = "fYear")
+  
+  print("Male!")
+  
+  IM2 <- INLAModelAdd(Data = TestDF %>% filter(Focal.sex == "M"),
+                      Response = Resps[r],
+                      Explanatory = Covar,
+                      AllModels = T,
+                      Base = T,
+                      # Rounds = 1,
+                      Clashes = ClashList,
+                      Family = Families[Resps[r]],
+                      Random = c("Focal.ring", 
+                                 # "BoxYear", 
+                                 "fYear"), 
+                      RandomModel = rep("iid", 3),
+                      AddSpatial = T,
+                      # Groups = T,
+                      Beep = F,
+                      GroupVar = "fYear")
+  
+  IMList[[Resps[r]]]$Female <- IM1
+  IMList[[Resps[r]]]$Male <- IM2
+  
+}
+
+
+IMList %>% map("Female") %>% map("FinalModel") %>% 
+  Efxplot(Intercept = F,
+          ModelNames = Resps %>%
+            str_replace_all(c("April.lay.date" = "Lay date",
+                              "Binary.succ" = "Binary success",
+                              "Clutch.size" = "Clutch size",
+                              "Mean.chick.weight" = "Mean chick weight",
+                              "Num.fledglings" = "Number of fledglings"))) +
+  scale_color_brewer(palette="Dark2") + 
+  guides(color = guide_legend(reverse = T)) +
+  
+  ggtitle("Female") +
+  
+  IMList %>% map("Male") %>% map("FinalModel") %>% 
+  Efxplot(Intercept = F,
+          ModelNames = Resps %>%
+            str_replace_all(c("April.lay.date" = "Lay date",
+                              "Binary.succ" = "Binary success",
+                              "Clutch.size" = "Clutch size",
+                              "Mean.chick.weight" = "Mean chick weight",
+                              "Num.fledglings" = "Number of fledglings"))) +
+  scale_color_brewer(palette= "Dark2") + 
+  guides(color = guide_legend(reverse = T)) +
+  
+  ggtitle("Male") +
+  
+  plot_layout(guides = "collect")
+
+ggsave("allYear/BaseModelOutputAge.jpeg", units = "mm", height = 180, width = 250)
+
+IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
+  Efxplot(Intercept = F,
+          ModelNames = Resps %>%
+            str_replace_all(c("April.lay.date" = "Lay date",
+                              "Binary.succ" = "Binary success",
+                              "Clutch.size" = "Clutch size",
+                              "Mean.chick.weight" = "Mean chick weight",
+                              "Num.fledglings" = "Number of fledglings"))) +
+  scale_color_brewer(palette="Dark2") + 
+  guides(color = guide_legend(reverse = T)) +
+  
+  ggtitle("Female") +
+  
+  IMList %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
+  Efxplot(Intercept = F,
+          ModelNames = Resps %>%
+            str_replace_all(c("April.lay.date" = "Lay date",
+                              "Binary.succ" = "Binary success",
+                              "Clutch.size" = "Clutch size",
+                              "Mean.chick.weight" = "Mean chick weight",
+                              "Num.fledglings" = "Number of fledglings"))) +
+  scale_color_brewer(palette= "Dark2") + 
+  guides(color = guide_legend(reverse = T)) +
+  
+  ggtitle("Male") +
+  
+  plot_layout(guides = "collect")
+
+ggsave("allYear/SPDEModelOutputAge.jpeg", units = "mm", height = 180, width = 250)
+
+
