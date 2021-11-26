@@ -121,8 +121,10 @@ for(r in r:length(Resps)){
 }
 
 #IMList %>% saveRDS("IMListNumber.rds")
+IMListNum <- IMList
 
-IMList %>% map("Female") %>% map("FinalModel") %>% 
+
+IMListNum %>% map("Female") %>% map("FinalModel") %>% 
   Efxplot(Intercept = F,
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
@@ -137,7 +139,7 @@ IMList %>% map("Female") %>% map("FinalModel") %>%
   
   ggtitle("Female") +
   
-  IMList %>% map("Male") %>% map("FinalModel") %>% 
+  IMListNum %>% map("Male") %>% map("FinalModel") %>% 
   Efxplot(Intercept = F,
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
@@ -154,9 +156,9 @@ IMList %>% map("Female") %>% map("FinalModel") %>%
   
   plot_layout(guides = "collect")
 
-ggsave("allYear/BaseModelOutputNumber.jpeg", units = "mm", height = 180, width = 250)
+ggsave("allYear/BaseModelOutputNumber.jpeg", units = "mm", height = 200, width = 400)
 
-IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
+IMListNum %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
   Efxplot(Intercept = F,
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
@@ -171,7 +173,7 @@ IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>%
   
   ggtitle("Female") +
   
-  IMList %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
+  IMListNum %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
   Efxplot(Intercept = F,
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
@@ -188,15 +190,87 @@ IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>%
   
   plot_layout(guides = "collect")
 
-ggsave("allYear/SPDEModelOutputNumber.jpeg", units = "mm", height = 180, width = 250)
+ggsave("allYear/SPDEModelOutputNumber.jpeg", units = "mm", height = 200, width = 400)
+
+
+IMListNum %>% map("Female") %>% map("FinalModel") %>% 
+  Efxplot(Intercept = F,
+          ModelNames = Resps %>%
+            str_replace_all(c("April.lay.date" = "Lay date",
+                              "Binary.succ" = "Binary success",
+                              "Clutch.size" = "Clutch size",
+                              "Mean.chick.weight" = "Mean chick weight",
+                              "Num.fledglings" = "Number of fledglings")),
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
+                           "Number of familiar neighbors", "Number of male familiar neighbors"))) +
+  scale_color_brewer(palette="Dark2") + 
+  guides(color = guide_legend(reverse = T)) +
+  
+  ggtitle("Female") +
+  
+  IMListNum %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
+  Efxplot(Intercept = F,
+          ModelNames = Resps %>%
+            str_replace_all(c("April.lay.date" = "Lay date",
+                              "Binary.succ" = "Binary success",
+                              "Clutch.size" = "Clutch size",
+                              "Mean.chick.weight" = "Mean chick weight",
+                              "Num.fledglings" = "Number of fledglings")),
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
+                           "Number of familiar neighbors", "Number of male familiar neighbors"))) +
+  scale_color_brewer(palette="Dark2") + 
+  guides(color = guide_legend(reverse = T)) +
+  
+  ggtitle("with SPDE") + 
+  
+  plot_layout(guides = "collect")
+
+  
+ggsave("allYear/FemaleModelOutputNumber.jpeg", units = "mm", height = 200, width = 400)
+
+
+IMListNum %>% map("Male") %>% map("FinalModel") %>% 
+  Efxplot(Intercept = F,
+          ModelNames = Resps %>%
+            str_replace_all(c("April.lay.date" = "Lay date",
+                              "Binary.succ" = "Binary success",
+                              "Clutch.size" = "Clutch size",
+                              "Mean.chick.weight" = "Mean chick weight",
+                              "Num.fledglings" = "Number of fledglings")),
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
+                           "Number of female familiar neighbors"))) +
+  scale_color_brewer(palette= "Dark2") + 
+  guides(color = guide_legend(reverse = T)) +
+  
+  ggtitle("Male") +
+  
+  IMListNum %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
+  Efxplot(Intercept = F,
+          ModelNames = Resps %>%
+            str_replace_all(c("April.lay.date" = "Lay date",
+                              "Binary.succ" = "Binary success",
+                              "Clutch.size" = "Clutch size",
+                              "Mean.chick.weight" = "Mean chick weight",
+                              "Num.fledglings" = "Number of fledglings")),
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
+                           "Number of female familiar neighbors"))) +
+  scale_color_brewer(palette= "Dark2") + 
+  guides(color = guide_legend(reverse = T)) +
+  
+  ggtitle("with SPDE") +
+  
+  plot_layout(guides = "collect")
+  
+ggsave("allYear/MaleModelOutputNumber.jpeg", units = "mm", height = 200, width = 400)
+
 
 
 #get model outputs####
 
-IMList %>% map("Male") %>% map("FinalModel") %>% map("dDIC")
+IMListNum %>% map("Male") %>% map("FinalModel") %>% map("dDIC")
 
 
-IMList %>% 
+IMListNum %>% 
   map(function(a){
     
     a %>% map(function(b){
@@ -218,7 +292,7 @@ IMList %>%
   saveRDS("allYear/NumberModelOutputs.rds")
 
 
-IMList %>% 
+IMListNum %>% 
   map(function(a){
     
     a %>% map(function(b){
@@ -574,8 +648,8 @@ summary.prop <- plot_grid(summary.female.prop, male.clutch)
 summary.prop.spatial <- plot_grid(summary.female.prop.spatial, male.clutch.spatial)
 
 
-ggsave("allYear/BaseModelForceProp.jpeg", plot = summary.prop, units = "mm", height = 180, width = 250)
-ggsave("allYear/SPDEModelForceProp.jpeg", plot = summary.prop.spatial, units = "mm", height = 180, width = 250)
+ggsave("allYear/BaseModelForceProp.jpeg", plot = summary.prop, units = "mm", height = 200, width = 400)
+ggsave("allYear/SPDEModelForceProp.jpeg", plot = summary.prop.spatial, units = "mm", height = 200, width = 400)
 
 
 
@@ -710,13 +784,14 @@ male.clutch.prop %>%
   saveRDS("allYear/male.clutch.propSPDE.rds")
 
 
-####supplementary only inds with at least 5 neighbors identified####
+####supplementary only inds with at least 3 neighbors of each sex identified####
 
 DFsupp <- readRDS("Data/fn.data.full.ALLYEARS.rds")
 
 DFsupp$N.num.id <- DFsupp$N.num.female.id + DFsupp$N.num.male.id
 
-DFsupp <- DFsupp[which(DFsupp$N.num.id > 4 ),]
+DFsupp <- DFsupp[which(DFsupp$N.num.female.id > 2 ),]
+DFsupp <- DFsupp[which(DFsupp$N.num.male.id > 2 ),]
 
 DFsupp <- DFsupp[!duplicated(colnames(DFsupp))]
 
@@ -862,7 +937,7 @@ IMList %>% map("Female") %>% map("FinalModel") %>%
   
   plot_layout(guides = "collect")
 
-ggsave("allYear/BaseModelOutputNumber.suppid.jpeg", units = "mm", height = 180, width = 250)
+ggsave("allYear/BaseModelOutputNumber.suppid.jpeg", units = "mm", height = 200, width = 400)
 
 IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
   Efxplot(Intercept = F,
@@ -887,12 +962,22 @@ IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>%
   
   plot_layout(guides = "collect")
 
-ggsave("allYear/SPDEModelOutputNumber.suppid.jpeg", units = "mm", height = 180, width = 250)
+ggsave("allYear/SPDEModelOutputNumber.suppid.jpeg", units = "mm", height = 200, width = 400)
 
-####supplementary only inds with nearest neighbor identified####
+####supplementary only nearest neighbor####
 DFsupp <- readRDS("Data/fn.data.full.ALLYEARS.rds")
 
 DFsupp <- DFsupp[which(!is.na(DFsupp$N.1.Mother) & !is.na(DFsupp$N.1.Father)),]
+
+DFsupp$N1fp <- NA
+
+DFsupp$N1fp <- with(DFsupp, ifelse(N1.Motherfp == TRUE & N1.Fatherfp == TRUE, 2, 
+                                         DFsupp$N1fp))
+DFsupp$N1fp <- with(DFsupp, ifelse(N1.Motherfp == TRUE & N1.Fatherfp == FALSE | 
+                                     N1.Motherfp == FALSE & N1.Fatherfp == TRUE , 1, 
+                                   DFsupp$N1fp))
+DFsupp$N1fp <- with(DFsupp, ifelse(N1.Motherfp == FALSE & N1.Fatherfp == FALSE , 0, 
+                                   DFsupp$N1fp))
 
 DFsupp <- DFsupp[!duplicated(colnames(DFsupp))]
 
@@ -919,9 +1004,9 @@ Covar <- c("Year",
            "Focal.sex") %>% setdiff("Focal.sex")
 
 SocialCovar <- c(#"N.num",
-  "N.num.ind.familiar",
-  "N.num.maleind.familiar",
-  "N.num.femaleind.familiar",
+  "N1.Motherfp",
+  "N1.Fatherfp",
+  "N1fp",
   "Pairfp"
 )
 
@@ -1004,9 +1089,9 @@ for(r in r:length(Resps)){
   
 }
 
-#IMList %>% saveRDS("IMListNumber.rds")
+IMListnear <- IMList
 
-IMList %>% map("Female") %>% map("FinalModel") %>% 
+IMListnear %>% map("Female") %>% map("FinalModel") %>% 
   Efxplot(Intercept = F,
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
@@ -1021,7 +1106,7 @@ IMList %>% map("Female") %>% map("FinalModel") %>%
   
   ggtitle("Female") +
   
-  IMList %>% map("Male") %>% map("FinalModel") %>% 
+  IMListnear %>% map("Male") %>% map("FinalModel") %>% 
   Efxplot(Intercept = F,
           ModelNames = Resps%>%
             str_replace_all(c("April.lay.date" = "Lay date",
@@ -1038,9 +1123,9 @@ IMList %>% map("Female") %>% map("FinalModel") %>%
   
   plot_layout(guides = "collect")
 
-ggsave("allYear/BaseModelOutputNumber.suppid.jpeg", units = "mm", height = 180, width = 250)
+ggsave("allYear/BaseModelOutputNumber.suppid.jpeg", units = "mm", height = 200, width = 400)
 
-IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
+IMListnear %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
   Efxplot(Intercept = F,
           ModelNames = Resps%>%
             str_replace_all(c("April.lay.date" = "Lay date",
@@ -1055,7 +1140,7 @@ IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>%
   
   ggtitle("Female") +
   
-  IMList %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
+  IMListnear %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
   Efxplot(Intercept = F,
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
@@ -1072,7 +1157,7 @@ IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>%
   
   plot_layout(guides = "collect")
 
-ggsave("allYear/SPDEModelOutputNumber.suppid.jpeg", units = "mm", height = 180, width = 250)
+ggsave("allYear/SPDEModelOutputNumber.suppid.jpeg", units = "mm", height = 200, width = 400)
 
 
 
@@ -1186,7 +1271,8 @@ IMList %>% map("Female") %>% map("FinalModel") %>%
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings"))) +
+                              "Num.fledglings" = "Number of fledglings")),
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age (adult)"))) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
@@ -1199,7 +1285,8 @@ IMList %>% map("Female") %>% map("FinalModel") %>%
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings"))) +
+                              "Num.fledglings" = "Number of fledglings")),
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age (adult)"))) +
   scale_color_brewer(palette= "Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
@@ -1207,7 +1294,7 @@ IMList %>% map("Female") %>% map("FinalModel") %>%
   
   plot_layout(guides = "collect")
 
-ggsave("allYear/BaseModelOutputAge.jpeg", units = "mm", height = 180, width = 250)
+ggsave("allYear/BaseModelOutputAge.jpeg", units = "mm", height = 200, width = 400)
 
 IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
   Efxplot(Intercept = F,
@@ -1216,7 +1303,8 @@ IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>%
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings"))) +
+                              "Num.fledglings" = "Number of fledglings")),
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age (adult)"))) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
@@ -1229,7 +1317,8 @@ IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>%
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings"))) +
+                              "Num.fledglings" = "Number of fledglings")),
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age (adult)"))) +
   scale_color_brewer(palette= "Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
@@ -1237,6 +1326,6 @@ IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>%
   
   plot_layout(guides = "collect")
 
-ggsave("allYear/SPDEModelOutputAge.jpeg", units = "mm", height = 180, width = 250)
+ggsave("allYear/SPDEModelOutputAge.jpeg", units = "mm", height = 200, width = 400)
 
 
