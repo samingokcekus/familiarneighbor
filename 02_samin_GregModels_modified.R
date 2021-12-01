@@ -48,7 +48,7 @@ IMList <-
   IMList2 <- 
   list()
 
-# Overall ####
+# run model ####
 
 r <- 1
 
@@ -123,24 +123,27 @@ for(r in r:length(Resps)){
 #IMList %>% saveRDS("IMListNumber.rds")
 IMListNum <- IMList
 
+# get figures ####
+
 
 IMListNum %>% map("Female") %>% map("FinalModel") %>% 
-  Efxplot(Intercept = F,
+  Efxplot(Intercept = F, size = 3, 
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
                               "Num.fledglings" = "Number of fledglings")),
-          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
-                       "Number of familiar neighbors", "Number of male familiar neighbors"))) +
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+                       "Number of familiar neighbors","Pair familiarity (true)",
+                       "Number of male familiar neighbors"))) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
   ggtitle("Female") +
   
   IMListNum %>% map("Male") %>% map("FinalModel") %>% 
-  Efxplot(Intercept = F,
+  Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
                               "Binary.succ" = "Binary success",
@@ -159,22 +162,23 @@ IMListNum %>% map("Female") %>% map("FinalModel") %>%
 ggsave("allYear/BaseModelOutputNumber.jpeg", units = "mm", height = 200, width = 400)
 
 IMListNum %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
-  Efxplot(Intercept = F,
+  Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
                               "Num.fledglings" = "Number of fledglings")),
-          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
-                           "Number of familiar neighbors", "Number of male familiar neighbors"))) +
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+                          "Number of familiar neighbors","Pair familiarity (true)",
+                         "Number of male familiar neighbors"))) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
   ggtitle("Female") +
   
   IMListNum %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
-  Efxplot(Intercept = F,
+  Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
                               "Binary.succ" = "Binary success",
@@ -194,30 +198,32 @@ ggsave("allYear/SPDEModelOutputNumber.jpeg", units = "mm", height = 200, width =
 
 
 IMListNum %>% map("Female") %>% map("FinalModel") %>% 
-  Efxplot(Intercept = F,
+  Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
                               "Num.fledglings" = "Number of fledglings")),
-          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
-                           "Number of familiar neighbors", "Number of male familiar neighbors"))) +
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+                           "Number of familiar neighbors","Pair familiarity (true)",
+                           "Number of male familiar neighbors"))) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
   ggtitle("Female") +
   
   IMListNum %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
-  Efxplot(Intercept = F,
+  Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
                               "Num.fledglings" = "Number of fledglings")),
-          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
-                           "Number of familiar neighbors", "Number of male familiar neighbors"))) +
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+                           "Number of familiar neighbors","Pair familiarity (true)",
+                           "Number of male familiar neighbors"))) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
@@ -230,7 +236,7 @@ ggsave("allYear/FemaleModelOutputNumber.jpeg", units = "mm", height = 200, width
 
 
 IMListNum %>% map("Male") %>% map("FinalModel") %>% 
-  Efxplot(Intercept = F,
+  Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
                               "Binary.succ" = "Binary success",
@@ -245,7 +251,7 @@ IMListNum %>% map("Male") %>% map("FinalModel") %>%
   ggtitle("Male") +
   
   IMListNum %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
-  Efxplot(Intercept = F,
+  Efxplot(Intercept = F, size = 3, 
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
                               "Binary.succ" = "Binary success",
@@ -264,8 +270,27 @@ IMListNum %>% map("Male") %>% map("FinalModel") %>%
 ggsave("allYear/MaleModelOutputNumber.jpeg", units = "mm", height = 200, width = 400)
 
 
+#map figures ####
 
-#get model outputs####
+IMListNum %>% names %>% 
+  map(~ggField(IMListNum[[.x]]$Female$Spatial$Model, IMListNum[[.x]]$Female$Spatial$Mesh) + 
+        labs(fill = .x) +
+        scale_fill_discrete_sequential(palette = "Sunset")) %>% 
+  ArrangeCowplot()
+
+
+  
+  IMListNum %>% names %>% 
+    map(~ggField(IMListNum[[.x]]$Male$Spatial$Model, IMListNum[[.x]]$Male$Spatial$Mesh) + 
+          labs(fill = .x) +
+          scale_fill_discrete_sequential(palette = "Sunset")) %>% 
+    ArrangeCowplot()
+  
+
+
+
+
+#get number model outputs####
 
 IMListNum %>% map("Male") %>% map("FinalModel") %>% map("dDIC")
 
@@ -318,6 +343,7 @@ IMListNum %>%
 
 
 
+
 ###Forcing proportion in based on model selection on number####
 
 ###female lay date ####
@@ -350,7 +376,7 @@ IMList <-
   IMList2 <- 
   list()
 
-# Overall ####
+# run model ####
 
 r <- 1
 
@@ -402,7 +428,7 @@ female.lay.prop <- IMList
 
 
 female.lay.prop %>% map("Female") %>% map("FinalModel") %>% 
-  Efxplot(Intercept = F,
+  Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps,
           VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Proportion familiar neighbors", 
                            "Pair familiarity (true)"))) +
@@ -413,7 +439,7 @@ female.lay.prop %>% map("Female") %>% map("FinalModel") %>%
 
 
 female.lay.prop %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
-  Efxplot(Intercept = F,
+  Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps,
           VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Proportion familiar neighbors", 
                            "Pair familiarity (true)"))) +
@@ -455,7 +481,7 @@ IMList <-
   IMList2 <- 
   list()
 
-# Overall ####
+# run model ####
 
 r <- 1
 
@@ -511,7 +537,7 @@ female.clutch.prop %>% map("Female") %>% map("FinalModel") %>%
 
 
 female.clutch.prop %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
-  Efxplot(Intercept = F,
+  Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps,
           VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Proportion familiar neighbors", 
                            "Pair familiarity (true)"))) +
@@ -520,11 +546,103 @@ female.clutch.prop %>% map("Female") %>% map(c("Spatial", "Model")) %>%
   
   ggtitle("Female") 
 
+###female number of fledglings ####
+DF <- readRDS("Data/fn.data.full.ALLYEARS.rds")
+
+DF <- DF[!duplicated(colnames(DF))]
+
+DF %<>% mutate(Pair = paste0(Father, "_", Mother))
+
+DF %<>% mutate(BoxYear = paste0(Box, "_", Year))
+
+Resps <- "Num.fledglings"
+
+Families <- "gaussian"
+
+names(Families) <- Resps
+
+Covar <- c("Year", 
+           "Largeoaks",
+           "Age_num",
+           "Focal.sex") %>% setdiff("Focal.sex")
+
+SocialCovar <- "N.prop.ind.familiar"
+
+ClashList <- list()
+
+IMList <- 
+  IMList2 <- 
+  list()
+
+# run model ####
+
+r <- 1
+
+for(r in r:length(Resps)){
+  
+  print(Resps[r])
+  
+  TestDF <- DF %>% 
+    dplyr::select(all_of(Covar), 
+                  all_of(SocialCovar),
+                  Focal.ring,
+                  Focal.sex,
+                  BoxYear,
+                  Resps[r], X, Y) %>% 
+    mutate(fYear = Year) %>% 
+    na.omit
+  
+  TestDF %>% nrow %>% print
+  
+  print("Female!")
+  
+  IM1 <- INLAModelAdd(Data = TestDF %>% filter(Focal.sex == "F"),
+                      Response = Resps[r],
+                      Explanatory = c(Covar, SocialCovar),
+                      #Add = SocialCovar, # %>% c(DensityCovar),
+                      AllModels = T,
+                      Base = T,
+                      Family = Families[Resps[r]],
+                      Random = c("Focal.ring", 
+                                 "fYear"), 
+                      RandomModel = rep("iid", 3),
+                      AddSpatial = T,
+                      # Groups = T,
+                      Beep = F,
+                      GroupVar = "fYear")
+  
+  IMList[[Resps[r]]]$Female <- IM1
+  
+}
+
+female.numf.prop <- IMList
+
+
+female.numf.prop %>% map("Female") %>% map("FinalModel") %>% 
+  Efxplot(Intercept = F,
+          ModelNames = Resps,
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Proportion familiar neighbors"))) +
+  scale_color_brewer(palette="Dark2") + 
+  guides(color = guide_legend(reverse = T)) +
+  
+  ggtitle("Female") 
+
+
+female.numf.prop %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
+  Efxplot(Intercept = F, Size = 3, 
+          ModelNames = Resps,
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Proportion familiar neighbors"))) +
+  scale_color_brewer(palette="Dark2") + 
+  guides(color = guide_legend(reverse = T)) +
+  
+  ggtitle("Female") 
+
 
 summary.female.prop <- Efxplot(list(female.clutch.prop[["Clutch.size"]][["Female"]][["FinalModel"]],
-                                    female.lay.prop[["April.lay.date"]][["Female"]][["FinalModel"]]), 
-                               Intercept = F,
-                               ModelNames = c("Clutch size", "Lay date"),
+                                    female.lay.prop[["April.lay.date"]][["Female"]][["FinalModel"]],
+                                    female.numf.prop[["Num.fledglings"]][["Female"]][["FinalModel"]]), 
+                               Intercept = F, Size = 3, 
+                               ModelNames = c("Clutch size", "Lay date", "Number of fledglings"),
                                VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Proportion male familiar neighbors", 
                                                 "Pair familiarity (true)", "Proportion familiar neighbors"))) +
                             
@@ -533,9 +651,10 @@ summary.female.prop <- Efxplot(list(female.clutch.prop[["Clutch.size"]][["Female
   ggtitle("Female (proportion)")
 
 summary.female.prop.spatial <- Efxplot(list(female.clutch.prop[["Clutch.size"]][["Female"]][["Spatial"]][["Model"]],
-                                            female.lay.prop[["April.lay.date"]][["Female"]][["Spatial"]][["Model"]]), 
-                                       Intercept = F,
-                                       ModelNames = c("Clutch size", "Lay date"),
+                                            female.lay.prop[["April.lay.date"]][["Female"]][["Spatial"]][["Model"]],
+                                            female.numf.prop[["Num.fledglings"]][["Female"]][["Spatial"]][["Model"]]), 
+                                       Intercept = F, Size = 3, 
+                                       ModelNames = c("Clutch size", "Lay date", "Number of fledglings"),
                                        VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Proportion male familiar neighbors", 
                                                         "Pair familiarity (true)", "Proportion familiar neighbors"))) +
   
@@ -577,7 +696,7 @@ IMList <-
   IMList2 <- 
   list()
 
-# Overall ####
+# run model ####
 
 r <- 1
 
@@ -622,7 +741,7 @@ male.clutch.prop <- IMList
 
 
 male.clutch <- male.clutch.prop %>% map("Male") %>% map("FinalModel") %>% 
-  Efxplot(Intercept = F,
+  Efxplot(Intercept = F, Size = 3,
           ModelNames = Resps,
           VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Proportion female familiar neighbors", 
                            "Pair familiarity (true)"))) +
@@ -634,7 +753,7 @@ male.clutch <- male.clutch.prop %>% map("Male") %>% map("FinalModel") %>%
 
 
 male.clutch.spatial <- male.clutch.prop %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
-  Efxplot(Intercept = F,
+  Efxplot(Intercept = F, Size = 3,
           ModelNames = Resps,
           VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Proportion female familiar neighbors", 
                            "Pair familiarity (true)"))) +
@@ -784,6 +903,7 @@ male.clutch.prop %>%
   saveRDS("allYear/male.clutch.propSPDE.rds")
 
 
+
 ####supplementary only inds with at least 3 neighbors of each sex identified####
 
 DFsupp <- readRDS("Data/fn.data.full.ALLYEARS.rds")
@@ -831,7 +951,7 @@ IMList <-
   IMList2 <- 
   list()
 
-# Overall ####
+# run model ####
 
 r <- 1
 
@@ -904,32 +1024,29 @@ for(r in r:length(Resps)){
 }
 
 #IMList %>% saveRDS("IMListNumber.rds")
+IMListID <- IMList
 
-IMList %>% map("Female") %>% map("FinalModel") %>% 
-  Efxplot(Intercept = F,
+IMListID %>% map("Female") %>% map("FinalModel") %>% 
+  Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings")),
-          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
-                           "Number of familiar neighbors", "Number of male familiar neighbors"))) +
+                              "Num.fledglings" = "Number of fledglings"))) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
   ggtitle("Female") +
   
-  IMList %>% map("Male") %>% map("FinalModel") %>% 
-  Efxplot(Intercept = F,
+  IMListID %>% map("Male") %>% map("FinalModel") %>% 
+  Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps%>%
             str_replace_all(c("April.lay.date" = "Lay date",
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings")),
-          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
-                           "Number of female familiar neighbors"))) +
+                              "Num.fledglings" = "Number of fledglings"))) +
   scale_color_brewer(palette= "Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
@@ -939,22 +1056,27 @@ IMList %>% map("Female") %>% map("FinalModel") %>%
 
 ggsave("allYear/BaseModelOutputNumber.suppid.jpeg", units = "mm", height = 200, width = 400)
 
-IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
-  Efxplot(Intercept = F,
-          ModelNames = Resps) +
-  
-  ggtitle("Female") +
-  
-  IMList %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
-  Efxplot(Intercept = F,
+IMListID %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
+  Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps%>%
             str_replace_all(c("April.lay.date" = "Lay date",
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings")),
-          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
-                           "Number of female familiar neighbors"))) +
+                              "Num.fledglings" = "Number of fledglings"))) +
+  scale_color_brewer(palette= "Dark2") + 
+  guides(color = guide_legend(reverse = T)) +
+  
+  ggtitle("Female") +
+  
+  IMListID %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
+  Efxplot(Intercept = F, Size = 3, 
+          ModelNames = Resps%>%
+            str_replace_all(c("April.lay.date" = "Lay date",
+                              "Binary.succ" = "Binary success",
+                              "Clutch.size" = "Clutch size",
+                              "Mean.chick.weight" = "Mean chick weight",
+                              "Num.fledglings" = "Number of fledglings"))) +
   scale_color_brewer(palette= "Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
@@ -964,200 +1086,57 @@ IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>%
 
 ggsave("allYear/SPDEModelOutputNumber.suppid.jpeg", units = "mm", height = 200, width = 400)
 
-####supplementary only nearest neighbor####
-DFsupp <- readRDS("Data/fn.data.full.ALLYEARS.rds")
 
-DFsupp <- DFsupp[which(!is.na(DFsupp$N.1.Mother) & !is.na(DFsupp$N.1.Father)),]
+#get supp model outputs####
 
-DFsupp$N1fp <- NA
+IMListID %>% map("Male") %>% map("FinalModel") %>% map("dDIC")
 
-DFsupp$N1fp <- with(DFsupp, ifelse(N1.Motherfp == TRUE & N1.Fatherfp == TRUE, 2, 
-                                         DFsupp$N1fp))
-DFsupp$N1fp <- with(DFsupp, ifelse(N1.Motherfp == TRUE & N1.Fatherfp == FALSE | 
-                                     N1.Motherfp == FALSE & N1.Fatherfp == TRUE , 1, 
-                                   DFsupp$N1fp))
-DFsupp$N1fp <- with(DFsupp, ifelse(N1.Motherfp == FALSE & N1.Fatherfp == FALSE , 0, 
-                                   DFsupp$N1fp))
 
-DFsupp <- DFsupp[!duplicated(colnames(DFsupp))]
-
-DFsupp %<>% mutate(Pair = paste0(Father, "_", Mother))
-
-DFsupp %<>% mutate(BoxYear = paste0(Box, "_", Year))
-
-Resps <- c(#"April.hatch.date",
-  "April.lay.date",
-  "Binary.succ",
-  "Clutch.size",
-  "Mean.chick.weight",
-  "Num.fledglings") %>% 
-  sort
-
-Families <- c("gaussian", "binomial", 
-              rep("gaussian", 3))
-
-names(Families) <- Resps
-
-Covar <- c("Year", 
-           "Largeoaks",
-           "Age_num",
-           "Focal.sex") %>% setdiff("Focal.sex")
-
-SocialCovar <- c(#"N.num",
-  "N1.Motherfp",
-  "N1.Fatherfp",
-  "N1fp",
-  "Pairfp"
-)
-
-ClashList <- list(SocialCovar[1:3])
-# ClashList <- list()
-
-IMList <- 
-  IMList2 <- 
-  list()
-
-# Overall ####
-
-r <- 1
-
-for(r in r:length(Resps)){
-  
-  print(Resps[r])
-  
-  TestDFsupp <- DFsupp %>% 
-    dplyr::select(all_of(Covar), 
-                  all_of(SocialCovar),
-                  Focal.ring,
-                  Focal.sex,
-                  BoxYear,
-                  Resps[r], X, Y) %>% 
-    mutate(fYear = Year) %>% 
-    na.omit
-  
-  TestDFsupp %>% nrow %>% print
-  
-  if(Resps[r] == "April.lay.date"){
+IMListID %>% 
+  map(function(a){
     
-    TestDFsupp %<>% 
-      filter(April.lay.date < 55)
+    a %>% map(function(b){
+      
+      b$FinalModel$summary.fixed %>% as.data.frame() %>% 
+        rownames_to_column() %>% 
+        rename(Variable = rowname)
+      
+    }) %>% bind_rows(.id = "Sex") %>% 
+      select(Sex, 
+             Variable,
+             Estimate = mean,
+             Lower = `0.025quant`,
+             Upper = `0.975quant`) %>% 
+      mutate_at(2:4+1, ~round(.x, 3)) %>% 
+      mutate(Significant = as.numeric(Lower*Upper > 0))
     
-  }
-  
-  print("Female!")
-  
-  IM1 <- INLAModelAdd(Data = TestDFsupp %>% filter(Focal.sex == "F"),
-                      Response = Resps[r],
-                      Explanatory = Covar,
-                      Add = SocialCovar, # %>% c(DensityCovar),
-                      AllModels = T,
-                      Base = T,
-                      # Rounds = 1,
-                      Clashes = ClashList,
-                      Family = Families[Resps[r]],
-                      Random = c("Focal.ring", 
-                                 # "BoxYear", 
-                                 "fYear"), 
-                      RandomModel = rep("iid", 3),
-                      AddSpatial = T,
-                      # Groups = T,
-                      Beep = F,
-                      GroupVar = "fYear")
-  
-  print("Male!")
-  
-  IM2 <- INLAModelAdd(Data = TestDFsupp %>% filter(Focal.sex == "M"),
-                      Response = Resps[r],
-                      Explanatory = Covar,
-                      Add = SocialCovar, # %>% c(DensityCovar),
-                      AllModels = T,
-                      Base = T,
-                      # Rounds = 1,
-                      Clashes = ClashList,
-                      Family = Families[Resps[r]],
-                      Random = c("Focal.ring", 
-                                 # "BoxYear", 
-                                 "fYear"), 
-                      RandomModel = rep("iid", 3),
-                      AddSpatial = T,
-                      # Groups = T,
-                      Beep = F,
-                      GroupVar = "fYear")
-  
-  IMList[[Resps[r]]]$Female <- IM1
-  IMList[[Resps[r]]]$Male <- IM2
-  
-}
+  }) %>% 
+  saveRDS("allYear/SuppIDModelOutputs.rds")
 
-IMListnear <- IMList
 
-IMListnear %>% map("Female") %>% map("FinalModel") %>% 
-  Efxplot(Intercept = F,
-          ModelNames = Resps %>%
-            str_replace_all(c("April.lay.date" = "Lay date",
-                              "Binary.succ" = "Binary success",
-                              "Clutch.size" = "Clutch size",
-                              "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings")),
-          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
-                           "Number of familiar neighbors", "Number of male familiar neighbors"))) +
-  scale_color_brewer(palette="Dark2") + 
-  guides(color = guide_legend(reverse = T)) +
-  
-  ggtitle("Female") +
-  
-  IMListnear %>% map("Male") %>% map("FinalModel") %>% 
-  Efxplot(Intercept = F,
-          ModelNames = Resps%>%
-            str_replace_all(c("April.lay.date" = "Lay date",
-                              "Binary.succ" = "Binary success",
-                              "Clutch.size" = "Clutch size",
-                              "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings")),
-          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
-                           "Number of female familiar neighbors"))) +
-  scale_color_brewer(palette= "Dark2") + 
-  guides(color = guide_legend(reverse = T)) +
-  
-  ggtitle("Male") +
-  
-  plot_layout(guides = "collect")
+IMListID %>% 
+  map(function(a){
+    
+    a %>% map(function(b){
+      
+      b$Spatial$Model$summary.fixed %>% as.data.frame() %>% 
+        rownames_to_column() %>% 
+        rename(Variable = rowname)
+      
+    }) %>% bind_rows(.id = "Sex") %>% 
+      select(Sex, 
+             Variable,
+             Estimate = mean,
+             Lower = `0.025quant`,
+             Upper = `0.975quant`) %>% 
+      mutate_at(2:4+1, ~round(.x, 3)) %>% 
+      mutate(Significant = as.numeric(Lower*Upper > 0))
+    
+  }) %>% 
+  saveRDS("allYear/SuppIDModelOutputsSPDE.rds")
 
-ggsave("allYear/BaseModelOutputNumber.suppid.jpeg", units = "mm", height = 200, width = 400)
 
-IMListnear %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
-  Efxplot(Intercept = F,
-          ModelNames = Resps%>%
-            str_replace_all(c("April.lay.date" = "Lay date",
-                              "Binary.succ" = "Binary success",
-                              "Clutch.size" = "Clutch size",
-                              "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings")),
-          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
-                           "Number of familiar neighbors", "Number of male familiar neighbors"))) +
-  scale_color_brewer(palette="Dark2") + 
-  guides(color = guide_legend(reverse = T)) +
-  
-  ggtitle("Female") +
-  
-  IMListnear %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
-  Efxplot(Intercept = F,
-          ModelNames = Resps %>%
-            str_replace_all(c("April.lay.date" = "Lay date",
-                              "Binary.succ" = "Binary success",
-                              "Clutch.size" = "Clutch size",
-                              "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings")),
-          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
-                           "Number of female familiar neighbors"))) +
-  scale_color_brewer(palette= "Dark2") + 
-  guides(color = guide_legend(reverse = T)) +
-  
-  ggtitle("Male") +
-  
-  plot_layout(guides = "collect")
 
-ggsave("allYear/SPDEModelOutputNumber.suppid.jpeg", units = "mm", height = 200, width = 400)
 
 
 
@@ -1194,7 +1173,7 @@ IMList <-
   IMList2 <- 
   list()
 
-# Overall ####
+# run model ####
 
 r <- 1
 
@@ -1263,9 +1242,10 @@ for(r in r:length(Resps)){
   
 }
 
+IMListAge <- IMList
 
-IMList %>% map("Female") %>% map("FinalModel") %>% 
-  Efxplot(Intercept = F,
+IMListAge %>% map("Female") %>% map("FinalModel") %>% 
+  Efxplot(Intercept = F, Size = 3,
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
                               "Binary.succ" = "Binary success",
@@ -1278,8 +1258,8 @@ IMList %>% map("Female") %>% map("FinalModel") %>%
   
   ggtitle("Female") +
   
-  IMList %>% map("Male") %>% map("FinalModel") %>% 
-  Efxplot(Intercept = F,
+  IMListAge %>% map("Male") %>% map("FinalModel") %>% 
+  Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
                               "Binary.succ" = "Binary success",
@@ -1296,8 +1276,8 @@ IMList %>% map("Female") %>% map("FinalModel") %>%
 
 ggsave("allYear/BaseModelOutputAge.jpeg", units = "mm", height = 200, width = 400)
 
-IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
-  Efxplot(Intercept = F,
+IMListAge %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
+  Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
                               "Binary.succ" = "Binary success",
@@ -1310,7 +1290,7 @@ IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>%
   
   ggtitle("Female") +
   
-  IMList %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
+  IMListAge %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
   Efxplot(Intercept = F,
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
@@ -1327,5 +1307,151 @@ IMList %>% map("Female") %>% map(c("Spatial", "Model")) %>%
   plot_layout(guides = "collect")
 
 ggsave("allYear/SPDEModelOutputAge.jpeg", units = "mm", height = 200, width = 400)
+
+#get age model outputs####
+
+IMListAge %>% map("Male") %>% map("FinalModel") %>% map("dDIC")
+
+
+IMListAge %>% 
+  map(function(a){
+    
+    a %>% map(function(b){
+      
+      b$FinalModel$summary.fixed %>% as.data.frame() %>% 
+        rownames_to_column() %>% 
+        rename(Variable = rowname)
+      
+    }) %>% bind_rows(.id = "Sex") %>% 
+      select(Sex, 
+             Variable,
+             Estimate = mean,
+             Lower = `0.025quant`,
+             Upper = `0.975quant`) %>% 
+      mutate_at(2:4+1, ~round(.x, 3)) %>% 
+      mutate(Significant = as.numeric(Lower*Upper > 0))
+    
+  }) %>% 
+  saveRDS("allYear/AgeModelOutputs.rds")
+
+
+IMListAge %>% 
+  map(function(a){
+    
+    a %>% map(function(b){
+      
+      b$Spatial$Model$summary.fixed %>% as.data.frame() %>% 
+        rownames_to_column() %>% 
+        rename(Variable = rowname)
+      
+    }) %>% bind_rows(.id = "Sex") %>% 
+      select(Sex, 
+             Variable,
+             Estimate = mean,
+             Lower = `0.025quant`,
+             Upper = `0.975quant`) %>% 
+      mutate_at(2:4+1, ~round(.x, 3)) %>% 
+      mutate(Significant = as.numeric(Lower*Upper > 0))
+    
+  }) %>% 
+  saveRDS("allYear/AgeModelOutputsSPDE.rds")
+
+
+
+
+
+
+
+
+
+
+
+##trying to look at spatial variation in unidentified birds #### 
+bdata <- read_csv("Data/BREEDINGDATA.csv")
+nestbox.data <- read.csv("Data/Nestboxes.csv")
+box.locations <- nestbox.data %>% dplyr::select(Box, x, y)
+
+bdata <-
+  bdata %>% 
+  filter(year > 1964) %>% 
+  mutate_at("Pnum", as.character) %>% 
+  mutate(temp = str_replace_all(Pnum, "^.{0,4}", "")) %>% 
+  mutate(attempt = substr(temp, 1, 1))
+
+bdata %<>% 
+  mutate(Box = str_replace_all(temp, "^.{1,1}", "")) %>% 
+  left_join(box.locations, by = "Box")
+
+bdata$ID <- NA
+
+bdata$ID <- with(bdata, ifelse(!is.na(Mother) & !is.na(Father), 2, 
+                                   bdata$ID))
+bdata$ID <- with(bdata, ifelse(is.na(Mother) & !is.na(Father) | 
+                                  is.na(Father) & !is.na(Mother) , 1, 
+                                bdata$ID))
+bdata$ID <- with(bdata, ifelse(is.na(Mother) & is.na(Father), 0, 
+                                bdata$ID))
+
+bdata <- bdata[which(bdata$Species == "g"),]
+
+names(bdata)<-str_to_title(names(bdata))
+
+Resps <- "Id"
+
+Families <- "gaussian"
+
+names(Families) <- Resps
+
+Covar <- c("Year")
+
+
+IMListID <- 
+  IMList2 <- 
+  list()
+
+# run model ####
+
+r <- 1
+
+for(r in r:length(Resps)){
+  
+  print(Resps[r])
+  
+  TestDF <- bdata %>% 
+    dplyr::select(all_of(Covar), 
+                  Resps[r], X, Y, Box, Year) %>% 
+    mutate(fYear = Year) %>% 
+    na.omit
+  
+  TestDF %>% nrow %>% print
+  
+  print("ID!")
+  
+  IMListID <- INLAModelAdd(Data = TestDF,
+                            Response = Resps[r],
+                            Explanatory = Covar,
+                            AllModels = T,
+                            Base = T,
+                            # Rounds = 1,
+                            Family = Families[Resps[r]],
+                            Random = c("Box", "fYear"), 
+                            RandomModel = rep("iid", 3),
+                            AddSpatial = T,
+                            # Groups = T,
+                            Beep = F,
+                            GroupVar = "fYear")
+  
+}
+
+#map figures ####
+
+IMListID %>% names %>% 
+  map(~ggField(IMListID$Spatial$Model, IMListID$Spatial$Mesh) + 
+        labs(fill = .x) +
+        scale_fill_discrete_sequential(palette = "Sunset")) 
+
+
+
+
 
 
