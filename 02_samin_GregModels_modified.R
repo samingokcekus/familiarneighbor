@@ -125,7 +125,6 @@ IMListNum <- IMList
 
 # get figures ####
 
-
 IMListNum %>% map("Female") %>% map("FinalModel") %>% 
   Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps %>%
@@ -133,10 +132,17 @@ IMListNum %>% map("Female") %>% map("FinalModel") %>%
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings")),
-          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age",  
-                       "Number of familiar neighbors","Pair familiarity (true)",
-                       "Number of male familiar neighbors"))) +
+                              "Num.fledglings" = "Number of fledglings"))#,
+          # VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+          #                  "Number of familiar neighbors","Pair familiarity (true)",
+          #                  "Number of male familiar neighbors"))
+  ) +
+  scale_x_discrete(limits = rev(c("Intercept", "Year", "Largeoaks", "Age_num", 
+                                  "N.num.ind.familiar", "PairfpTRUE", "N.num.maleind.familiar")[-c(1:2)]),
+                   labels = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+                                  "Number of familiar neighbors","Pair familiarity (true)",
+                                  "Number of male familiar neighbors")[-c(1:2)])
+  ) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
@@ -151,7 +157,7 @@ IMListNum %>% map("Female") %>% map("FinalModel") %>%
                               "Mean.chick.weight" = "Mean chick weight",
                               "Num.fledglings" = "Number of fledglings")),
           VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
-                            "Number of female familiar neighbors"))) +
+                           "Number of female familiar neighbors"))) +
   scale_color_brewer(palette= "Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
@@ -170,8 +176,8 @@ IMListNum %>% map("Female") %>% map(c("Spatial", "Model")) %>%
                               "Mean.chick.weight" = "Mean chick weight",
                               "Num.fledglings" = "Number of fledglings")),
           VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age",  
-                          "Number of familiar neighbors","Pair familiarity (true)",
-                         "Number of male familiar neighbors"))) +
+                           "Number of familiar neighbors","Pair familiarity (true)",
+                           "Number of male familiar neighbors"))) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
@@ -231,7 +237,7 @@ IMListNum %>% map("Female") %>% map("FinalModel") %>%
   
   plot_layout(guides = "collect")
 
-  
+
 ggsave("allYear/FemaleModelOutputNumber.jpeg", units = "mm", height = 200, width = 400)
 
 
@@ -266,26 +272,32 @@ IMListNum %>% map("Male") %>% map("FinalModel") %>%
   ggtitle("with SPDE") +
   
   plot_layout(guides = "collect")
-  
+
 ggsave("allYear/MaleModelOutputNumber.jpeg", units = "mm", height = 200, width = 400)
 
 
 #map figures ####
 
+library(sf)
+
+WoodOutline <- st_read("woodoutlinefiles")
+
+WoodOutline %<>% slice(1)
+
 IMListNum %>% names %>% 
   map(~ggField(IMListNum[[.x]]$Female$Spatial$Model, IMListNum[[.x]]$Female$Spatial$Mesh) + 
         labs(fill = .x) +
+        geom_sf(data = WoodOutline, inherit.aes = F, fill = NA, colour = "black") +
         scale_fill_discrete_sequential(palette = "Sunset")) %>% 
   ArrangeCowplot()
 
+IMListNum %>% names %>% 
+  map(~ggField(IMListNum[[.x]]$Male$Spatial$Model, IMListNum[[.x]]$Male$Spatial$Mesh) + 
+        labs(fill = .x) +
+        geom_sf(data = WoodOutline, inherit.aes = F, fill = NA, colour = "black") +
+        scale_fill_discrete_sequential(palette = "Sunset")) %>% 
+  ArrangeCowplot()
 
-  
-  IMListNum %>% names %>% 
-    map(~ggField(IMListNum[[.x]]$Male$Spatial$Model, IMListNum[[.x]]$Male$Spatial$Mesh) + 
-          labs(fill = .x) +
-          scale_fill_discrete_sequential(palette = "Sunset")) %>% 
-    ArrangeCowplot()
-  
 
 
 
@@ -339,10 +351,21 @@ IMListNum %>%
   saveRDS("allYear/NumberModelOutputsSPDE.rds")
 
 
+# Getting DIC changes associated with spatial models ####
 
+IMListNum %>% 
+  map("Male") %>% 
+  map(~MDIC(list(.x$FinalModel, .x$Spatial$Model)) %>% 
+        as.data.frame %>% rename(Base = 1, SPDE = 2)) %>% 
+  bind_rows(.id = "Response") %>% 
+  mutate(DeltaDIC = SPDE - Base)
 
-
-
+IMListNum %>% 
+  map("Female") %>% 
+  map(~MDIC(list(.x$FinalModel, .x$Spatial$Model)) %>% 
+        as.data.frame %>% rename(Base = 1, SPDE = 2)) %>% 
+  bind_rows(.id = "Response") %>% 
+  mutate(DeltaDIC = SPDE - Base)
 
 ###Forcing proportion in based on model selection on number####
 
@@ -553,7 +576,7 @@ summary.female.prop <- Efxplot(list(female.clutch.prop[["Clutch.size"]][["Female
                                ModelNames = c("Clutch size", "Lay date", "Number of fledglings"),
                                VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Proportion male familiar neighbors", 
                                                 "Pair familiarity (true)", "Proportion familiar neighbors"))) +
-                            
+  
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) + 
   ggtitle("Female (proportion)")
@@ -1292,12 +1315,12 @@ bdata %<>%
 bdata$ID <- NA
 
 bdata$ID <- with(bdata, ifelse(!is.na(Mother) & !is.na(Father), 2, 
-                                   bdata$ID))
+                               bdata$ID))
 bdata$ID <- with(bdata, ifelse(is.na(Mother) & !is.na(Father) | 
-                                  is.na(Father) & !is.na(Mother) , 1, 
-                                bdata$ID))
+                                 is.na(Father) & !is.na(Mother) , 1, 
+                               bdata$ID))
 bdata$ID <- with(bdata, ifelse(is.na(Mother) & is.na(Father), 0, 
-                                bdata$ID))
+                               bdata$ID))
 
 bdata <- bdata[which(bdata$Species == "g"),]
 
@@ -1335,18 +1358,18 @@ for(r in r:length(Resps)){
   print("ID!")
   
   IMListID <- INLAModelAdd(Data = TestDF,
-                            Response = Resps[r],
-                            Explanatory = Covar,
-                            AllModels = T,
-                            Base = T,
-                            # Rounds = 1,
-                            Family = Families[Resps[r]],
-                            Random = c("Box", "fYear"), 
-                            RandomModel = rep("iid", 3),
-                            AddSpatial = T,
-                            # Groups = T,
-                            Beep = F,
-                            GroupVar = "fYear")
+                           Response = Resps[r],
+                           Explanatory = Covar,
+                           AllModels = T,
+                           Base = T,
+                           # Rounds = 1,
+                           Family = Families[Resps[r]],
+                           Random = c("Box", "fYear"), 
+                           RandomModel = rep("iid", 3),
+                           AddSpatial = T,
+                           # Groups = T,
+                           Beep = F,
+                           GroupVar = "fYear")
   
 }
 
