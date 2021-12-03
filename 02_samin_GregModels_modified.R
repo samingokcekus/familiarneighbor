@@ -275,6 +275,25 @@ IMListNum %>% map("Male") %>% map("FinalModel") %>%
 
 ggsave("allYear/MaleModelOutputNumber.jpeg", units = "mm", height = 200, width = 400)
 
+# Plotting base and spde together ####
+
+IMListNum %>% 
+  map("Female") %>% 
+  map(~list(.x$FinalModel, .x$Spatial$Model) %>% 
+        Efxplot(Intercept = F, Size = 3, 
+                ModelNames = c("Base", "SPDE")) +
+        scale_x_discrete(limits = rev(c("Intercept", "Year", "Largeoaks", "Age_num", 
+                                        "N.num.ind.familiar", "PairfpTRUE", "N.num.maleind.familiar")[-c(1:2)]),
+                         labels = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+                                        "Number of familiar neighbors","Pair familiarity (true)",
+                                        "Number of male familiar neighbors")[-c(1:2)])
+        ) +
+        scale_color_brewer(palette="Dark2") + 
+        guides(color = guide_legend(reverse = T))) %>% 
+  ArrangeCowplot() +
+  plot_annotation(tag_levels = "A") +
+  plot_layout(guides = "collect") +
+  ggtitle("Female")
 
 #map figures ####
 
