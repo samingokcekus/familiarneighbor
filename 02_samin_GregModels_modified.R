@@ -291,6 +291,9 @@ IMListNum %>% names %>%
         scale_fill_discrete_sequential(palette = "Sunset")) %>% 
   ArrangeCowplot()
 
+ggsave("allYear/FemaleMap.jpeg", units = "mm", height = 200, width = 500)
+
+
 IMListNum %>% names %>% 
   map(~ggField(IMListNum[[.x]]$Male$Spatial$Model, IMListNum[[.x]]$Male$Spatial$Mesh) + 
         labs(fill = .x) +
@@ -299,6 +302,7 @@ IMListNum %>% names %>%
   ArrangeCowplot()
 
 
+ggsave("allYear/MaleMap.jpeg", units = "mm", height = 200, width = 500)
 
 
 
@@ -353,19 +357,25 @@ IMListNum %>%
 
 # Getting DIC changes associated with spatial models ####
 
-IMListNum %>% 
+maleDIC <- IMListNum %>% 
   map("Male") %>% 
   map(~MDIC(list(.x$FinalModel, .x$Spatial$Model)) %>% 
         as.data.frame %>% rename(Base = 1, SPDE = 2)) %>% 
   bind_rows(.id = "Response") %>% 
   mutate(DeltaDIC = SPDE - Base)
 
-IMListNum %>% 
+femaleDIC <- IMListNum %>% 
   map("Female") %>% 
   map(~MDIC(list(.x$FinalModel, .x$Spatial$Model)) %>% 
         as.data.frame %>% rename(Base = 1, SPDE = 2)) %>% 
   bind_rows(.id = "Response") %>% 
   mutate(DeltaDIC = SPDE - Base)
+
+library(xtable)
+maleDIC <- xtable(maleDIC, digits = 3)
+print.xtable(maleDIC, type="html", file="maleDIC.html")
+femaleDIC <- xtable(femaleDIC, digits = 3)
+print.xtable(femaleDIC, type="html", file="femaleDIC.html")
 
 ###Forcing proportion in based on model selection on number####
 
