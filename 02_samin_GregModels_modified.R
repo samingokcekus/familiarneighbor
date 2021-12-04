@@ -1099,7 +1099,10 @@ IMListID %>% map("Female") %>% map("FinalModel") %>%
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings"))) +
+                              "Num.fledglings" = "Number of fledglings")),
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+                           "Pair familiarity (true)", "Number of female familiar neighbors",
+                           "Number of male familiar neighbors"))) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
@@ -1112,7 +1115,9 @@ IMListID %>% map("Female") %>% map("FinalModel") %>%
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings"))) +
+                              "Num.fledglings" = "Number of fledglings")),
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+                           "Pair familiarity (true)"))) +
   scale_color_brewer(palette= "Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
@@ -1129,7 +1134,10 @@ IMListID %>% map("Female") %>% map(c("Spatial", "Model")) %>%
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings"))) +
+                              "Num.fledglings" = "Number of fledglings")),
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+                           "Pair familiarity (true)", "Number of female familiar neighbors",
+                           "Number of male familiar neighbors"))) +
   scale_color_brewer(palette= "Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
@@ -1142,7 +1150,10 @@ IMListID %>% map("Female") %>% map(c("Spatial", "Model")) %>%
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings"))) +
+                              "Num.fledglings" = "Number of fledglings")),
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+                           "Pair familiarity (true)"))
+          ) +
   scale_color_brewer(palette= "Dark2") + 
   guides(color = guide_legend(reverse = T)) +
   
@@ -1357,7 +1368,7 @@ IMListAge %>% map("Female") %>% map(c("Spatial", "Model")) %>%
   ggtitle("Female") +
   
   IMListAge %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
-  Efxplot(Intercept = F,
+  Efxplot(Intercept = F, Size = 3, 
           ModelNames = Resps %>%
             str_replace_all(c("April.lay.date" = "Lay date",
                               "Binary.succ" = "Binary success",
@@ -1493,7 +1504,7 @@ for(r in r:length(Resps)){
   
   print("ID!")
   
-  IMListID <- INLAModelAdd(Data = TestDF,
+  IMListIDD <- INLAModelAdd(Data = TestDF,
                            Response = Resps[r],
                            Explanatory = Covar,
                            AllModels = T,
@@ -1511,8 +1522,8 @@ for(r in r:length(Resps)){
 
 #map figures ####
 
-IMListID %>% names %>% 
-  map(~ggField(IMListID$Spatial$Model, IMListID$Spatial$Mesh) + 
+IMListIDD %>% names %>% 
+  map(~ggField(IMListIDD$Spatial$Model, IMListIDD$Spatial$Mesh) + 
         labs(fill = .x) +
         scale_fill_discrete_sequential(palette = "Sunset")) 
 
