@@ -132,16 +132,10 @@ IMListNum %>% map("Female") %>% map("FinalModel") %>%
                               "Binary.succ" = "Binary success",
                               "Clutch.size" = "Clutch size",
                               "Mean.chick.weight" = "Mean chick weight",
-                              "Num.fledglings" = "Number of fledglings"))#,
-          # VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age",  
-          #                  "Number of familiar neighbors","Pair familiarity (true)",
-          #                  "Number of male familiar neighbors"))
-  ) +
-  scale_x_discrete(limits = rev(c("Intercept", "Year", "Largeoaks", "Age_num", 
-                                  "N.num.ind.familiar", "PairfpTRUE", "N.num.maleind.familiar")[-c(1:2)]),
-                   labels = rev(c("Intercept", "Year", "Habitat quality", "Age",  
-                                  "Number of familiar neighbors","Pair familiarity (true)",
-                                  "Number of male familiar neighbors")[-c(1:2)])
+                              "Num.fledglings" = "Number of fledglings")),
+          VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+                           "Number of familiar neighbors","Pair familiarity (true)",
+                           "Number of male familiar neighbors"))
   ) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
@@ -166,6 +160,59 @@ IMListNum %>% map("Female") %>% map("FinalModel") %>%
   plot_layout(guides = "collect")
 
 ggsave("allYear/BaseModelOutputNumber.jpeg", units = "mm", height = 200, width = 400)
+
+
+#without year 
+
+IMListNum %>% map("Female") %>% map("FinalModel") %>% 
+  Efxplot(Intercept = F, Size = 3, 
+          ModelNames = Resps %>%
+            str_replace_all(c("April.lay.date" = "Lay date",
+                              "Binary.succ" = "Binary success",
+                              "Clutch.size" = "Clutch size",
+                              "Mean.chick.weight" = "Mean chick weight",
+                              "Num.fledglings" = "Number of fledglings"))#,
+          # VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+          #                  "Number of familiar neighbors","Pair familiarity (true)",
+          #                  "Number of male familiar neighbors"))
+  ) +
+  scale_x_discrete(limits = rev(c("Intercept", "Year", "Largeoaks", "Age_num", 
+                                  "N.num.ind.familiar", "PairfpTRUE", "N.num.maleind.familiar")[-c(1:2)]),
+                   labels = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+                                  "Number of familiar neighbors","Pair familiarity (true)",
+                                  "Number of male familiar neighbors")[-c(1:2)])
+  ) +
+  scale_color_brewer(palette="Dark2") + 
+  guides(color = guide_legend(reverse = T)) +
+  
+  ggtitle("Female") +
+  
+  IMListNum %>% map("Male") %>% map("FinalModel") %>% 
+  Efxplot(Intercept = F, Size = 3, 
+          ModelNames = Resps %>%
+            str_replace_all(c("April.lay.date" = "Lay date",
+                              "Binary.succ" = "Binary success",
+                              "Clutch.size" = "Clutch size",
+                              "Mean.chick.weight" = "Mean chick weight",
+                              "Num.fledglings" = "Number of fledglings"))#,
+          #VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
+          #                 "Number of female familiar neighbors"))) +
+  ) + scale_x_discrete(limits = rev(c("Intercept", "Year", "Largeoaks", "Age_num", 
+                                      "PairfpTRUE", "N.num.femaleind.familiar")[-c(1:2)]),
+                       labels = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+                                      "Pair familiarity (true)",
+                                      "Number of female familiar neighbors")[-c(1:2)])
+  ) + 
+  scale_color_brewer(palette= "Dark2") + 
+  guides(color = guide_legend(reverse = T)) +
+  
+  ggtitle("Male") +
+  
+  plot_layout(guides = "collect")
+
+ggsave("allYear/BaseModelOutputNumberNoYear.jpeg", units = "mm", height = 200, width = 400)
+
+
 
 IMListNum %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
   Efxplot(Intercept = F, Size = 3, 
@@ -201,6 +248,56 @@ IMListNum %>% map("Female") %>% map(c("Spatial", "Model")) %>%
   plot_layout(guides = "collect")
 
 ggsave("allYear/SPDEModelOutputNumber.jpeg", units = "mm", height = 200, width = 400)
+
+## no year 
+
+IMListNum %>% map("Female") %>% map(c("Spatial", "Model")) %>% 
+  Efxplot(Intercept = F, Size = 3, 
+          ModelNames = Resps %>%
+            str_replace_all(c("April.lay.date" = "Lay date",
+                              "Binary.succ" = "Binary success",
+                              "Clutch.size" = "Clutch size",
+                              "Mean.chick.weight" = "Mean chick weight",
+                              "Num.fledglings" = "Number of fledglings"))#,
+          #VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+          #                 "Number of familiar neighbors","Pair familiarity (true)",
+          #                 "Number of male familiar neighbors"))) +
+  ) +
+  scale_x_discrete(limits = rev(c("Intercept", "Year", "Largeoaks", "Age_num", 
+                                  "N.num.ind.familiar", "PairfpTRUE", "N.num.maleind.familiar")[-c(1:2)]),
+                   labels = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+                                  "Number of familiar neighbors","Pair familiarity (true)",
+                                  "Number of male familiar neighbors")[-c(1:2)])
+  ) +
+  scale_color_brewer(palette="Dark2") + 
+  guides(color = guide_legend(reverse = T)) +
+  
+  ggtitle("Female") +
+  
+  IMListNum %>% map("Male") %>% map(c("Spatial", "Model")) %>% 
+  Efxplot(Intercept = F, Size = 3, 
+          ModelNames = Resps %>%
+            str_replace_all(c("April.lay.date" = "Lay date",
+                              "Binary.succ" = "Binary success",
+                              "Clutch.size" = "Clutch size",
+                              "Mean.chick.weight" = "Mean chick weight",
+                              "Num.fledglings" = "Number of fledglings"))#,
+          #VarNames = rev(c("Intercept", "Year", "Habitat quality", "Age", "Pair familiarity (true)", 
+          #                 "Number of female familiar neighbors"))) +
+  ) + scale_x_discrete(limits = rev(c("Intercept", "Year", "Largeoaks", "Age_num", 
+                                      "PairfpTRUE", "N.num.femaleind.familiar")[-c(1:2)]),
+                       labels = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+                                      "Pair familiarity (true)",
+                                      "Number of female familiar neighbors")[-c(1:2)])
+  ) + 
+  scale_color_brewer(palette= "Dark2") + 
+  guides(color = guide_legend(reverse = T)) +
+  
+  ggtitle("Male") +
+  
+  plot_layout(guides = "collect")
+
+ggsave("allYear/SPDEModelOutputNumberNoYear.jpeg", units = "mm", height = 200, width = 400)
 
 
 IMListNum %>% map("Female") %>% map("FinalModel") %>% 
@@ -277,23 +374,33 @@ ggsave("allYear/MaleModelOutputNumber.jpeg", units = "mm", height = 200, width =
 
 # Plotting base and spde together ####
 
+##IMListNum %>% 
+##  map("Female") %>% 
+##  map(~list(.x$FinalModel, .x$Spatial$Model) %>% 
+##        Efxplot(Intercept = F, Size = 3, 
+##                ModelNames = c("Base", "SPDE")) +
+##        scale_x_discrete(limits = rev(c("Intercept", "Year", "Largeoaks", "Age_num", 
+##                                        "N.num.ind.familiar", "PairfpTRUE", "N.num.maleind.familiar")[-c(1:2)]),
+##                         labels = rev(c("Intercept", "Year", "Habitat quality", "Age",  
+##                                        "Number of familiar neighbors","Pair familiarity (true)",
+##                                        "Number of male familiar neighbors")[-c(1:2)])
+##        ) +
+##        scale_color_brewer(palette="Dark2") + 
+##        guides(color = guide_legend(reverse = T))) %>% 
+##  ArrangeCowplot() +
+##  plot_annotation(tag_levels = "A") +
+##  plot_layout(guides = "collect") +
+##  ggtitle("Female")
+
 IMListNum %>% 
   map("Female") %>% 
   map(~list(.x$FinalModel, .x$Spatial$Model) %>% 
         Efxplot(Intercept = F, Size = 3, 
                 ModelNames = c("Base", "SPDE")) +
-        scale_x_discrete(limits = rev(c("Intercept", "Year", "Largeoaks", "Age_num", 
-                                        "N.num.ind.familiar", "PairfpTRUE", "N.num.maleind.familiar")[-c(1:2)]),
-                         labels = rev(c("Intercept", "Year", "Habitat quality", "Age",  
-                                        "Number of familiar neighbors","Pair familiarity (true)",
-                                        "Number of male familiar neighbors")[-c(1:2)])
-        ) +
         scale_color_brewer(palette="Dark2") + 
         guides(color = guide_legend(reverse = T))) %>% 
-  ArrangeCowplot() +
-  plot_annotation(tag_levels = "A") +
-  plot_layout(guides = "collect") +
-  ggtitle("Female")
+  ArrangeCowplot()
+
 
 #map figures ####
 
