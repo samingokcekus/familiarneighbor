@@ -1470,6 +1470,7 @@ bdata$ID <- with(bdata, ifelse(is.na(Mother) & is.na(Father), 0,
                                bdata$ID))
 
 bdata <- bdata[which(bdata$Species == "g"),]
+bdata <- bdata[which(bdata$Section != "unknown"),]
 
 names(bdata)<-str_to_title(names(bdata))
 
@@ -1479,7 +1480,7 @@ Families <- "gaussian"
 
 names(Families) <- Resps
 
-Covar <- c("Year")
+Covar <- c("Year", "Section")
 
 
 IMListID <- 
@@ -1496,7 +1497,7 @@ for(r in r:length(Resps)){
   
   TestDF <- bdata %>% 
     dplyr::select(all_of(Covar), 
-                  Resps[r], X, Y, Box, Year) %>% 
+                  Resps[r], X, Y, Box, Year, Section) %>% 
     mutate(fYear = Year) %>% 
     na.omit
   
@@ -1525,10 +1526,11 @@ for(r in r:length(Resps)){
 IMListIDD %>% names %>% 
   map(~ggField(IMListIDD$Spatial$Model, IMListIDD$Spatial$Mesh) + 
         labs(fill = .x) +
+        geom_sf(data = WoodOutline, inherit.aes = F, fill = NA, colour = "black") +
         scale_fill_discrete_sequential(palette = "Sunset")) 
 
+ggsave("allYear/IDMap.jpeg", units = "mm", height = 200, width = 500)
 
-
-
+Efxplot(IMListIDD[["FinalModel"]])
 
 
