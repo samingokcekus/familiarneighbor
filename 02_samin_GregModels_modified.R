@@ -184,6 +184,7 @@ IMListNum %>% map("Female") %>% map("FinalModel") %>%
   ) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
+  ylim(c(-.25,.25)) + 
   
   ggtitle("Female") +
   
@@ -205,6 +206,7 @@ IMListNum %>% map("Female") %>% map("FinalModel") %>%
   ) + 
   scale_color_brewer(palette= "Dark2") + 
   guides(color = guide_legend(reverse = T)) +
+  ylim(c(-.25,.25)) + 
   
   ggtitle("Male") +
   
@@ -227,6 +229,7 @@ IMListNum %>% map("Female") %>% map(c("Spatial", "Model")) %>%
                            "Number of male familiar neighbors"))) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
+  ylim(c(-.25,.25)) + 
   
   ggtitle("Female") +
   
@@ -242,6 +245,7 @@ IMListNum %>% map("Female") %>% map(c("Spatial", "Model")) %>%
                            "Number of female familiar neighbors"))) +
   scale_color_brewer(palette= "Dark2") + 
   guides(color = guide_legend(reverse = T)) +
+  ylim(c(-.25,.25)) + 
   
   ggtitle("Male") +
   
@@ -271,6 +275,7 @@ IMListNum %>% map("Female") %>% map(c("Spatial", "Model")) %>%
   ) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
+  ylim(c(-.25,.25)) + 
   
   ggtitle("Female") +
   
@@ -292,6 +297,7 @@ IMListNum %>% map("Female") %>% map(c("Spatial", "Model")) %>%
   ) + 
   scale_color_brewer(palette= "Dark2") + 
   guides(color = guide_legend(reverse = T)) +
+  ylim(c(-.25,.25)) + 
   
   ggtitle("Male") +
   
@@ -313,6 +319,7 @@ IMListNum %>% map("Female") %>% map("FinalModel") %>%
                            "Number of male familiar neighbors"))) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
+  ylim(c(-.25,.25)) + 
   
   ggtitle("Female") +
   
@@ -329,6 +336,7 @@ IMListNum %>% map("Female") %>% map("FinalModel") %>%
                            "Number of male familiar neighbors"))) +
   scale_color_brewer(palette="Dark2") + 
   guides(color = guide_legend(reverse = T)) +
+  ylim(c(-.25,.25)) + 
   
   ggtitle("with SPDE") + 
   
