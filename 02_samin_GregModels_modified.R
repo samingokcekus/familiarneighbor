@@ -177,9 +177,9 @@ IMListNum %>% map("Female") %>% map("FinalModel") %>%
           #                  "Number of male familiar neighbors"))
   ) +
   scale_x_discrete(limits = rev(c("Intercept", "Year", "Largeoaks", "Age_num", 
-                                  "N.num.ind.familiar", "PairfpTRUE", "N.num.maleind.familiar")[-c(1:2)]),
+                                  "PairfpTRUE", "N.num.ind.familiar", "N.num.maleind.familiar")[-c(1:2)]),
                    labels = rev(c("Intercept", "Year", "Habitat quality", "Age",  
-                                  "Number of familiar neighbors","Pair familiarity (true)",
+                                  "Pair familiarity (true)", "Number of familiar neighbors",
                                   "Number of male familiar neighbors")[-c(1:2)])
   ) +
   scale_color_brewer(palette="Dark2") + 
@@ -268,9 +268,9 @@ IMListNum %>% map("Female") %>% map(c("Spatial", "Model")) %>%
           #                 "Number of male familiar neighbors"))) +
   ) +
   scale_x_discrete(limits = rev(c("Intercept", "Year", "Largeoaks", "Age_num", 
-                                  "N.num.ind.familiar", "PairfpTRUE", "N.num.maleind.familiar")[-c(1:2)]),
+                                   "PairfpTRUE", "N.num.ind.familiar", "N.num.maleind.familiar")[-c(1:2)]),
                    labels = rev(c("Intercept", "Year", "Habitat quality", "Age",  
-                                  "Number of familiar neighbors","Pair familiarity (true)",
+                                  "Pair familiarity (true)","Number of familiar neighbors",
                                   "Number of male familiar neighbors")[-c(1:2)])
   ) +
   scale_color_brewer(palette="Dark2") + 
