@@ -421,11 +421,59 @@ WoodOutline %<>% slice(1)
 IMListNum %>% names %>% 
   map(~ggField(IMListNum[[.x]]$Female$Spatial$Model, IMListNum[[.x]]$Female$Spatial$Mesh) + 
         labs(fill = .x) +
+        theme_void() +
         geom_sf(data = WoodOutline, inherit.aes = F, fill = NA, colour = "black") +
-        scale_fill_discrete_sequential(palette = "Sunset")) %>% 
-  ArrangeCowplot()
+        scale_fill_discrete_sequential(palette = "Sunset"))
 
-ggsave("allYear/FemaleMap.jpeg", units = "mm", height = 200, width = 500)
+ggsave("allYear/FemaleMap.jpeg", units = "mm", height = 200, width = 300)
+
+library(rgeos)
+library(rgdal)
+wyt <- readOGR("woodoutlinefiles","perimeter poly with clearings_region")
+poly.sp <- SpatialPolygons(list(wyt@polygons[[1]]))
+m.bound <- poly.sp@polygons[[1]]@Polygons[[1]]@coords
+boxout <- gEnvelope(wyt)
+wytdiff <- gDifference(boxout, wyt)
+
+
+ggField(IMListNum[["April.lay.date"]][["Female"]][["Spatial"]][["Model"]], IMListNum[["April.lay.date"]][["Female"]][["Spatial"]][["Mesh"]]) + 
+  theme_void() +
+  labs(fill="April lay date") +  
+  geom_sf(data = WoodOutline, inherit.aes = F, fill = NA, colour = "black") +
+  scale_fill_discrete_sequential(palette = "Sunset") + 
+  geom_polygon(data=wytdiff, fill="white", aes(x=long, y=lat, group=group))
+
+ggField(IMListNum[["Binary.succ"]][["Female"]][["Spatial"]][["Model"]], IMListNum[["Binary.succ"]][["Female"]][["Spatial"]][["Mesh"]]) + 
+  theme_void() +
+  labs(fill="Binary success") +  
+  geom_sf(data = WoodOutline, inherit.aes = F, fill = NA, colour = "black") +
+  scale_fill_discrete_sequential(palette = "Sunset") + 
+  geom_polygon(data=wytdiff, fill="white", aes(x=long, y=lat, group=group))
+
+ggField(IMListNum[["Clutch.size"]][["Female"]][["Spatial"]][["Model"]], IMListNum[["Clutch.size"]][["Female"]][["Spatial"]][["Mesh"]]) + 
+  theme_void() +
+  labs(fill="Clutch size") +  
+  geom_sf(data = WoodOutline, inherit.aes = F, fill = NA, colour = "black") +
+  scale_fill_discrete_sequential(palette = "Sunset") + 
+  geom_polygon(data=wytdiff, fill="white", aes(x=long, y=lat, group=group))
+
+ggField(IMListNum[["Mean.chick.weight"]][["Female"]][["Spatial"]][["Model"]], IMListNum[["Mean.chick.weight"]][["Female"]][["Spatial"]][["Mesh"]]) + 
+  theme_void() +
+  labs(fill="Mean chick weight") +  
+  geom_sf(data = WoodOutline, inherit.aes = F, fill = NA, colour = "black") +
+  scale_fill_discrete_sequential(palette = "Sunset") + 
+  geom_polygon(data=wytdiff, fill="white", aes(x=long, y=lat, group=group))
+
+ggField(IMListNum[["Num.fledglings"]][["Female"]][["Spatial"]][["Model"]], IMListNum[["Num.fledglings"]][["Female"]][["Spatial"]][["Mesh"]]) + 
+  theme_void() +
+  labs(fill="Number of fledglings") +  
+  geom_sf(data = WoodOutline, inherit.aes = F, fill = NA, colour = "black") +
+  scale_fill_discrete_sequential(palette = "Sunset") + 
+  geom_polygon(data=wytdiff, fill="white", aes(x=long, y=lat, group=group))
+
+#%>% 
+#  ArrangeCowplot()
+
 
 
 IMListNum %>% names %>% 
